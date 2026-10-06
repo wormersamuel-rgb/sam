@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>medassure beauty – Guía del portal</title>
+<style>
+  @page { size: 1920px 1080px; margin: 0; }
+  :root {
+    --blue: #62aae3;
+    --blue-d: #2f7fc1;
+    --blue-l: #eaf4fc;
+    --navy: #13243a;
+    --text: #22303f;
+    --muted: #5d6b7a;
+    --line: #dde4ec;
+    --bg-app: #f3f6fa;
+    --accent: #e8492f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #fff; }
+  body { font-family: "Inter", "Noto Sans", Arial, sans-serif; color: var(--text); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .slide { width: 1920px; height: 1080px; position: relative; overflow: hidden; page-break-after: always; break-after: page; background: #fff; }
+  .slide:last-child { page-break-after: auto; break-after: auto; }
+
+  /* header / footer */
+  .hdr { position: absolute; top: 44px; left: 96px; right: 96px; height: 80px; display: flex; justify-content: space-between; align-items: center; }
+  .hdr .ma { height: 62px; }
+  .hdr .jhc { height: 78px; }
+  .ftr { position: absolute; bottom: 36px; left: 96px; right: 96px; display: flex; justify-content: space-between; align-items: center; font-size: 19px; color: var(--muted); border-top: 2px solid var(--line); padding-top: 18px; }
+  .ftr b { color: var(--navy); font-weight: 600; }
+
+  .title { position: absolute; top: 160px; left: 96px; right: 96px; }
+  .kicker { display: inline-flex; align-items: center; gap: 14px; font-size: 22px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--blue-d); }
+  .kicker .pill { background: var(--blue); color: #fff; border-radius: 999px; padding: 6px 18px; letter-spacing: .04em; }
+  h1 { font-size: 58px; line-height: 1.1; color: var(--navy); font-weight: 800; margin-top: 14px; letter-spacing: -.01em; }
+
+  .body { position: absolute; top: 330px; left: 96px; right: 96px; bottom: 120px; display: flex; gap: 64px; }
+  .steps { width: 560px; flex: none; display: flex; flex-direction: column; gap: 34px; padding-top: 10px; }
+  .step { display: flex; gap: 22px; align-items: flex-start; }
+  .num { flex: none; width: 54px; height: 54px; border-radius: 50%; background: var(--blue); color: #fff; font-weight: 800; font-size: 28px; display: grid; place-items: center; box-shadow: 0 0 0 5px #fff, 0 2px 8px rgba(0,0,0,.18); }
+  .num.acc { background: var(--accent); }
+  .step p { font-size: 29px; line-height: 1.38; color: var(--text); padding-top: 6px; }
+  .step p b { color: var(--navy); }
+  .url { display: inline-block; margin-top: 10px; font-size: 30px; font-weight: 700; color: var(--blue-d); background: var(--blue-l); border: 2px solid #cfe4f6; border-radius: 12px; padding: 8px 18px; }
+  .note { margin-top: 6px; background: #fff8e8; border-left: 8px solid #f2b43a; border-radius: 10px; padding: 20px 24px; font-size: 25px; line-height: 1.4; color: #4a3a12; }
+  .note.ok { background: #ecf8ef; border-color: #3aa76d; color: #173d27; }
+
+  /* mockup frame */
+  .shot { flex: 1; position: relative; }
+  .browser { position: absolute; inset: 0; border-radius: 18px; background: #fff; box-shadow: 0 18px 50px rgba(19,36,58,.18), 0 0 0 2px #d6dee8; overflow: hidden; display: flex; flex-direction: column; }
+  .bar { height: 58px; flex: none; background: #eef1f5; border-bottom: 2px solid #dde3ea; display: flex; align-items: center; gap: 12px; padding: 0 22px; }
+  .dot { width: 15px; height: 15px; border-radius: 50%; }
+  .addr { margin-left: 18px; flex: 1; height: 36px; background: #fff; border-radius: 999px; display: flex; align-items: center; padding: 0 20px; font-size: 20px; color: #3b4652; gap: 10px; }
+  .addr svg { width: 16px; height: 16px; }
+  .vp { flex: 1; position: relative; overflow: hidden; }
+
+  .ring { position: absolute; border: 5px solid var(--accent); border-radius: 14px; box-shadow: 0 0 0 6px rgba(232,73,47,.18); pointer-events: none; }
+  .badge { position: absolute; width: 54px; height: 54px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 800; font-size: 28px; display: grid; place-items: center; box-shadow: 0 0 0 5px #fff, 0 3px 10px rgba(0,0,0,.25); z-index: 5; }
+
+  /* ---------- slide 1 ---------- */
+  .cover-band { position: absolute; left: 0; right: 0; top: 0; height: 1080px; background: linear-gradient(180deg, #fff 0%, #fff 55%, var(--blue-l) 100%); }
+  .cover-title { position: absolute; top: 250px; left: 96px; right: 96px; }
+  .cover-title .kicker { font-size: 26px; }
+  .cover-title h1 { font-size: 92px; margin-top: 22px; }
+  .cover-title .sub { font-size: 36px; color: var(--muted); margin-top: 22px; }
+  .cover-title .rule { width: 140px; height: 8px; border-radius: 4px; background: var(--blue); margin-top: 36px; }
+  .overview { position: absolute; left: 96px; right: 96px; top: 640px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 22px; }
+  .ov { background: #fff; border: 2px solid var(--line); border-radius: 18px; padding: 26px 24px; box-shadow: 0 6px 18px rgba(19,36,58,.06); }
+  .ov .n { font-size: 20px; font-weight: 700; color: var(--blue-d); letter-spacing: .06em; text-transform: uppercase; }
+  .ov .t { font-size: 27px; font-weight: 700; color: var(--navy); margin-top: 10px; line-height: 1.25; }
+  .ov .d { font-size: 21px; color: var(--muted); margin-top: 8px; line-height: 1.35; }
+
+  /* ---------- slide 2: website ---------- */
+  .site-nav { height: 96px; display: flex; align-items: center; padding: 0 40px; gap: 26px; border-bottom: 1px solid #edf0f3; }
+  .site-nav img { height: 40px; }
+  .site-nav .items { display: flex; gap: 22px; font-size: 19px; color: #2b3540; margin-left: 18px; }
+  .site-nav .help { font-size: 19px; color: #2b3540; margin-left: auto; }
+  .site-nav .login { font-size: 19px; font-weight: 600; color: #1f2a36; border: 2px solid #1f2a36; border-radius: 6px; padding: 9px 18px; position: relative; }
+  .site-nav .soc { display: flex; gap: 10px; }
+  .site-nav .soc i { width: 18px; height: 18px; border-radius: 4px; background: #2b3540; display: block; }
+  .hero { position: absolute; top: 96px; left: 0; right: 0; height: 470px; background: linear-gradient(90deg, #f1f3f5 0%, #f4f5f7 55%, #fff 100%); }
+  .hero img { position: absolute; right: 30px; top: 0; height: 470px; -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 22%, #000 85%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0%, #000 22%, #000 85%, transparent 100%); }
+  .hero .copy { position: absolute; left: 64px; top: 110px; }
+  .hero h2 { font-family: Georgia, "Noto Serif", serif; font-size: 56px; color: #1d2a38; line-height: 1.1; }
+  .hero p { font-size: 24px; color: #3d4954; margin-top: 18px; }
+  .below { position: absolute; top: 600px; left: 64px; font-family: Georgia, "Noto Serif", serif; font-size: 32px; font-weight: 700; color: #1d2a38; }
+  .zoom { position: absolute; right: -30px; top: 180px; width: 360px; background: #fff; border-radius: 20px; box-shadow: 0 14px 40px rgba(19,36,58,.28), 0 0 0 3px var(--accent); padding: 26px; z-index: 6; }
+  .zoom .lbl { font-size: 18px; font-weight: 700; color: var(--accent); letter-spacing: .06em; text-transform: uppercase; }
+  .zoom .btn { margin-top: 16px; font-size: 34px; font-weight: 700; color: #1f2a36; border: 3px solid #1f2a36; border-radius: 10px; padding: 14px 0; text-align: center; }
+
+  /* ---------- slide 3: login ---------- */
+  .login-bg { position: absolute; inset: 0; background: var(--bg-app); display: grid; place-items: center; }
+  .login-card { width: 640px; background: #fff; border-radius: 18px; box-shadow: 0 8px 30px rgba(19,36,58,.10); padding: 30px 56px 34px; text-align: center; position: relative; }
+  .login-card img { height: 70px; }
+  .login-card h3 { font-size: 28px; color: var(--navy); margin-top: 14px; }
+  .login-card .s { font-size: 21px; color: var(--muted); margin-top: 8px; }
+  .fld { text-align: left; margin-top: 20px; position: relative; }
+  .fld label { font-size: 19px; font-weight: 600; color: #3a4654; }
+  .fld .in { margin-top: 6px; height: 54px; border: 2px solid #c9d3de; border-radius: 10px; font-size: 21px; color: #9aa6b2; display: flex; align-items: center; padding: 0 18px; }
+  .forgot { text-align: right; margin-top: 10px; font-size: 19px; color: var(--blue-d); }
+  .lbtn { margin-top: 18px; height: 58px; background: var(--blue); color: #fff; border-radius: 10px; font-size: 23px; font-weight: 700; display: grid; place-items: center; position: relative; }
+
+  /* ---------- slide 4: dashboard ---------- */
+  .app { position: absolute; inset: 0; background: var(--bg-app); padding: 34px 40px; }
+  .app .top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .app .org { font-size: 17px; font-weight: 700; color: var(--blue-d); letter-spacing: .06em; }
+  .app .pt { font-size: 34px; font-weight: 800; color: var(--navy); margin-top: 4px; }
+  .app .acc { font-size: 18px; color: var(--muted); margin-top: 2px; }
+  .app .user { display: flex; align-items: center; gap: 10px; font-size: 18px; color: var(--muted); background: #fff; border-radius: 999px; padding: 8px 18px 8px 8px; border: 1px solid var(--line); }
+  .app .user i { width: 34px; height: 34px; border-radius: 50%; background: var(--blue-l); color: var(--blue-d); font-style: normal; font-weight: 700; font-size: 15px; display: grid; place-items: center; }
+  .kpis { display: grid; grid-template-columns: 1fr 1fr 1fr 1.1fr; gap: 18px; margin-top: 26px; }
+  .kpi { background: #fff; border-radius: 14px; border: 1px solid var(--line); padding: 18px 22px; min-height: 118px; }
+  .kpi .k { font-size: 18px; color: var(--muted); }
+  .kpi .v { font-size: 30px; font-weight: 800; color: var(--navy); margin-top: 6px; }
+  .kpi .h { font-size: 16px; color: #8a96a3; margin-top: 4px; }
+  .kpi.cta { display: grid; place-items: center; position: relative; }
+  .newbtn { background: var(--blue); color: #fff; font-weight: 700; font-size: 24px; border-radius: 10px; padding: 18px 34px; white-space: nowrap; }
+  .panels { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 18px; }
+  .panel { background: #fff; border-radius: 18px; border: 1px solid var(--line); padding: 22px 26px; }
+  .panel h4 { font-size: 24px; color: var(--navy); display: flex; justify-content: space-between; border-bottom: 1px solid var(--line); padding-bottom: 14px; }
+  .panel h4 span { color: #9aa6b2; font-weight: 400; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 26px; margin-top: 16px; }
+  .grid2 .k { font-size: 16px; color: var(--muted); }
+  .grid2 .v { font-size: 19px; font-weight: 700; color: var(--navy); margin-top: 2px; }
+  .daterow { display: flex; gap: 12px; margin-top: 18px; align-items: flex-end; }
+  .daterow .f { flex: 1; }
+  .daterow .f .k { font-size: 16px; color: var(--muted); }
+  .daterow .f .in { margin-top: 6px; height: 46px; border: 1px solid #c9d3de; border-radius: 8px; font-size: 18px; display: flex; align-items: center; padding: 0 14px; color: #3a4654; }
+  .daterow .b { height: 46px; background: #a9d0ef; color: #fff; font-weight: 700; font-size: 18px; border-radius: 8px; padding: 0 20px; display: grid; place-items: center; }
+  .dim { opacity: .55; }
+
+  /* ---------- slide 5: form ---------- */
+  .form { position: absolute; inset: 0; background: var(--bg-app); padding: 18px 32px; }
+  .crumb { font-size: 17px; color: var(--muted); }
+  .crumb b { color: var(--navy); }
+  .fcols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 10px; }
+  .card { background: #fff; border-radius: 14px; border: 1px solid var(--line); padding: 12px 20px 14px; position: relative; }
+  .card h5 { font-size: 19px; font-weight: 800; color: var(--navy); margin-bottom: 6px; }
+  .r2 { display: grid; grid-template-columns: 1fr 1fr; gap: 7px 14px; }
+  .f2 .k { font-size: 14.5px; color: var(--muted); margin-bottom: 3px; }
+  .f2 .in { height: 35px; border: 1px solid #c9d3de; border-radius: 7px; font-size: 16.5px; display: flex; align-items: center; padding: 0 11px; color: var(--navy); font-weight: 500; white-space: nowrap; overflow: hidden; }
+  .f2 .in.ph { color: #9aa6b2; font-weight: 400; }
+  .f2.full { grid-column: 1 / -1; }
+  .slider { position: relative; height: 6px; background: #d9e2ec; border-radius: 3px; margin: 18px 6px 8px; }
+  .slider .fill { position: absolute; left: 0; top: 0; bottom: 0; width: 25%; background: var(--blue); border-radius: 3px; }
+  .slider .knob { position: absolute; left: 25%; top: -9px; width: 24px; height: 24px; border-radius: 50%; background: var(--blue-d); transform: translateX(-50%); box-shadow: 0 0 0 4px #fff, 0 1px 4px rgba(0,0,0,.3); }
+  .ticks { display: flex; justify-content: space-between; font-size: 15px; color: var(--muted); }
+  .ticks b { color: var(--navy); }
+  .toggle { display: flex; align-items: center; gap: 10px; font-size: 16.5px; margin-top: 12px; }
+  .sw { width: 46px; height: 24px; border-radius: 12px; background: #c9d3de; position: relative; }
+  .sw::after { content: ""; position: absolute; left: 3px; top: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; }
+  .chk { display: flex; align-items: center; gap: 10px; font-size: 16.5px; margin-top: 10px; }
+  .chk i { width: 20px; height: 20px; border: 2px solid #9aa6b2; border-radius: 4px; display: block; }
+  .sum { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 8px; font-size: 16.5px; }
+  .sum div { display: flex; justify-content: space-between; padding: 3px 0; }
+  .sum .tot { font-weight: 800; color: var(--navy); font-size: 19px; }
+  .actions { display: flex; justify-content: flex-end; gap: 14px; margin-top: 4px; align-items: center; position: relative; }
+  .actions .c { font-size: 19px; color: var(--muted); padding: 12px 22px; }
+  .actions .s { font-size: 21px; font-weight: 700; color: #fff; background: var(--blue); border-radius: 9px; padding: 12px 34px; }
+
+  /* ---------- slide 6: invoice ---------- */
+  .inv { position: absolute; inset: 0; padding: 22px 40px; background: #fff; font-size: 17px; color: #222; }
+  .inv .ih { display: flex; justify-content: space-between; align-items: flex-start; }
+  .inv .ih .l img { height: 46px; }
+  .inv .ih .r { text-align: right; font-size: 15px; line-height: 1.4; color: #444; }
+  .inv .ih .r img { height: 54px; margin-bottom: 2px; }
+  .inv .meta { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 22px; }
+  .inv .meta h3 { font-size: 30px; color: #111; }
+  .inv .meta .mm { font-size: 17px; text-align: right; line-height: 1.5; }
+  .inv .on { font-size: 15px; color: #555; margin-top: 16px; }
+  .inv table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 18px; }
+  .inv th { text-align: left; font-size: 15px; color: #555; font-weight: 600; border-bottom: 2px solid #222; padding: 8px 6px; }
+  .inv td { padding: 8px 6px; border-bottom: 1px solid #ddd; }
+  .inv td.n, .inv th.n { text-align: right; white-space: nowrap; }
+  .inv tr.t td { font-weight: 800; font-size: 20px; border-bottom: 3px double #222; }
+  .inv tr.t td { padding-top: 16px; }
+  .inv .legal { position: absolute; left: 40px; right: 40px; bottom: 22px; border-top: 1px solid #ccc; padding-top: 10px; font-size: 14px; color: #666; line-height: 1.5; }
+  .inv .pay { margin-top: 22px; font-size: 17px; line-height: 1.55; }
+  .inv .bank { display: inline-block; margin-top: 6px; background: #f4f6f8; border-radius: 8px; padding: 8px 14px; font-weight: 600; }
+  .stamp { position: absolute; top: 24px; left: 50%; transform: translateX(-50%) rotate(-4deg); border: 4px solid rgba(232,73,47,.75); color: rgba(232,73,47,.85); font-weight: 800; font-size: 24px; letter-spacing: .14em; padding: 4px 18px; border-radius: 8px; }
+
+  .callouts { display: flex; flex-direction: column; gap: 22px; padding-top: 6px; }
+  .co { display: flex; gap: 18px; align-items: flex-start; }
+  .co p { font-size: 26px; line-height: 1.38; padding-top: 7px; }
+  .co p span { display: block; font-size: 22px; color: var(--muted); margin-top: 2px; }
+
+  /* ---------- slide 7: listing ---------- */
+  .lst { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 24px; border: 2px solid var(--line); border-radius: 16px; overflow: hidden; }
+  .lst thead th { background: var(--navy); color: #fff; font-weight: 600; font-size: 21px; text-align: left; padding: 18px 20px; }
+  .lst td { padding: 18px 20px; border-top: 1px solid var(--line); color: var(--navy); }
+  .lst tbody tr:nth-child(even) td { background: #f7f9fc; }
+  .lst .n { text-align: right; white-space: nowrap; }
+  .lst tfoot td { font-weight: 800; background: var(--blue-l); border-top: 2px solid #bcd9f1; font-size: 26px; }
+  .lst-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 18px; font-size: 26px; color: var(--navy); }
+  .lst-head b { font-size: 30px; }
+
+  /* ---------- slide 8: contact ---------- */
+  .contact { position: absolute; top: 330px; left: 96px; right: 96px; display: grid; grid-template-columns: 1.15fr 1fr; gap: 48px; }
+  .person { background: linear-gradient(135deg, var(--navy) 0%, #1f3a5c 100%); color: #fff; border-radius: 26px; padding: 52px 56px; }
+  .person .role { font-size: 22px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #9fd0f5; }
+  .person .name { font-size: 64px; font-weight: 800; margin-top: 10px; }
+  .person .lines { margin-top: 38px; display: flex; flex-direction: column; gap: 22px; }
+  .person .ln { display: flex; align-items: center; gap: 20px; font-size: 34px; font-weight: 600; }
+  .person .ln svg { width: 44px; height: 44px; flex: none; }
+  .company { border: 2px solid var(--line); border-radius: 26px; padding: 44px 48px; }
+  .company .cn { font-size: 30px; font-weight: 800; color: var(--navy); line-height: 1.25; }
+  .company .dgs { font-size: 21px; color: var(--muted); margin-top: 8px; }
+  .office { margin-top: 30px; padding-top: 26px; border-top: 2px solid var(--line); }
+  .office .o { font-size: 20px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--blue-d); }
+  .office .a { font-size: 26px; color: var(--text); margin-top: 8px; line-height: 1.4; }
+</style>
+</head>
+<body>
+
+<!-- ============ 1. PORTADA ============ -->
+<section class="slide">
+  <div class="cover-band"></div>
+  <div class="hdr"><img class="ma" src="assets/logo_medassure.png" alt=""><img class="jhc" src="assets/logo_jhc.png" alt=""></div>
+  <div class="cover-title">
+    <div class="kicker">Contrato de grupo · Guía para clínicas</div>
+    <h1>medassure beauty</h1>
+    <div class="sub">Cómo acceder al portal y dar de alta a sus pacientes, paso a paso</div>
+    <div class="rule"></div>
+  </div>
+  <div class="overview">
+    <div class="ov"><div class="n">Paso 1</div><div class="t">Abrir el portal</div><div class="d">medassure.de → «Iniciar sesión»</div></div>
+    <div class="ov"><div class="n">Paso 2</div><div class="t">Iniciar sesión</div><div class="d">Con su correo y contraseña</div></div>
+    <div class="ov"><div class="n">Paso 3</div><div class="t">Nuevo contrato</div><div class="d">Desde el panel de control</div></div>
+    <div class="ov"><div class="n">Paso 4</div><div class="t">Datos del paciente</div><div class="d">Rellenar y guardar</div></div>
+    <div class="ov"><div class="n">Cada mes</div><div class="t">Factura</div><div class="d">Con el listado de seguros</div></div>
+  </div>
+  <div class="ftr"><span>Su contacto en España: <b>Samuel Wörmer</b> · IberAssekuranz Brokers · (+34) 672 69 68 21</span><span>samuel.woermer@iberassekuranz.es</span></div>
+</section>
+
+<!-- ============ 2. ACCESO ============ -->
+<section class="slide">
+  <div class="hdr"><img class="ma" src="assets/logo_medassure.png" alt=""><img class="jhc" src="assets/logo_jhc.png" alt=""></div>
+  <div class="title">
+    <div class="kicker"><span class="pill">Paso 1</span> Acceso al portal</div>
+    <h1>Abra la web de medassure</h1>
+  </div>
+  <div class="body">
+    <div class="steps">
+      <div class="step"><div class="num">1</div><p>Abra el navegador y entre en:<br><span class="url">https://medassure.de</span></p></div>
+      <div class="step"><div class="num">2</div><p>Se abre la página de inicio de medassure.</p></div>
+      <div class="step"><div class="num acc">3</div><p>Haga clic en <b>«Iniciar sesión»</b>, arriba a la derecha.</p></div>
+    </div>
+    <div class="shot">
+      <div class="browser">
+        <div class="bar"><span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
+          <div class="addr"><svg viewBox="0 0 16 16"><path d="M4 7V5a4 4 0 0 1 8 0v2h1v8H3V7h1zm2 0h4V5a2 2 0 0 0-4 0v2z" fill="#5d6b7a"/></svg>medassure.de</div></div>
+        <div class="vp">
+          <div class="site-nav">
+            <img src="assets/logo_medassure.png" alt="" style="height:44px">
+            <div class="items"><span>beauty</span><span>adipo</span><span>dental</span><span>ortopedia</span></div>
+            <span class="help">Ayuda y servicio ⌄</span>
+            <span class="login" id="loginbtn">Iniciar sesión</span>
+            <div class="soc"><i></i><i></i><i></i></div>
+          </div>
+          <div class="hero">
+            <img src="assets/hero.jpg" alt="">
+            <div class="copy"><h2>¡Vaya sobre<br>seguro!</h2><p>Con los seguros de medassure</p></div>
+          </div>
+          <div class="below">¡Una buena sensación desde el primer momento!</div>
+        </div>
+      </div>
+      <div class="ring" data-t="#loginbtn"></div>
+      <div class="badge" data-t="#loginbtn" data-p="tl">3</div>
+    </div>
+  </div>
+  <div class="ftr"><span>medassure beauty · Guía del portal</span><span>2</span></div>
+</section>
+
+<!-- ============ 3. LOGIN ============ -->
+<section class="slide">
+  <div class="hdr"><img class="ma" src="assets/logo_medassure.png" alt=""><img class="jhc" src="assets/logo_jhc.png" alt=""></div>
+  <div class="title">
+    <div class="kicker"><span class="pill">Paso 2</span> Acceso al portal</div>
+    <h1>Inicie sesión con sus datos de acceso</h1>
+  </div>
+  <div class="body">
+    <div class="steps">
+      <div class="step"><div class="num">1</div><p>Se abre la página de inicio de sesión.</p></div>
+      <div class="step"><div class="num acc">2</div><p>Escriba su <b>correo electrónico</b> y su <b>contraseña</b>.</p></div>
+      <div class="step"><div class="num acc">3</div><p>Haga clic en <b>«Iniciar sesión»</b>.</p></div>
+      <div class="note">Recibirá el usuario (correo electrónico) y la contraseña por separado, una vez nos confirme que quiere trabajar con el portal.</div>
+    </div>
+    <div class="shot">
+      <div class="browser">
+        <div class="bar"><span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
+          <div class="addr"><svg viewBox="0 0 16 16"><path d="M4 7V5a4 4 0 0 1 8 0v2h1v8H3V7h1zm2 0h4V5a2 2 0 0 0-4 0v2z" fill="#5d6b7a"/></svg>Portal medassure · Inicio de sesión</div></div>
+        <div class="vp">
+          <div class="login-bg">
+            <div class="login-card">
+              <img src="assets/logo_jhc.png" alt="">
+              <h3>Bienvenido a la gestión de su seguro</h3>
+              <div class="s">Inicie sesión para acceder a su cuenta</div>
+              <div id="lgf"><div class="fld"><label>Correo electrónico</label><div class="in">nombre@suclinica.es</div></div>
+              <div class="fld"><label>Contraseña</label><div class="in">••••••••••</div></div></div>
+              <div class="forgot">¿Ha olvidado su contraseña?</div>
+              <div class="lbtn" id="lgb">Iniciar sesión</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ring" data-t="#lgf"></div>
+      <div class="badge" data-t="#lgf" data-p="l">2</div>
+      <div class="ring" data-t="#lgb"></div>
+      <div class="badge" data-t="#lgb" data-p="l">3</div>
+    </div>
+  </div>
+  <div class="ftr"><span>medassure beauty · Guía del portal</span><span>3</span></div>
+</section>
+
+<!-- ============ 4. NUEVO CONTRATO ============ -->
+<section class="slide">
+  <div class="hdr"><img class="ma" src="assets/logo_medassure.png" alt=""><img class="jhc" src="assets/logo_jhc.png" alt=""></div>
+  <div class="title">
+    <div class="kicker"><span class="pill">Paso 3</span> Alta de pacientes</div>
+    <h1>Cree un nuevo contrato</h1>
+  </div>
+  <div class="body">
+    <div class="steps">
+      <div class="step"><div class="num">1</div><p>Tras iniciar sesión verá el <b>panel de control</b> de su clínica.</p></div>
+      <div class="step"><div class="num acc">2</div><p>Haga clic en <b>«Nuevo contrato»</b>, arriba a la derecha.</p></div>
+      <div class="note ok">En «Confirmaciones» encontrará después todos los seguros que haya dado de alta.</div>
+    </div>
+    <div class="shot">
+      <div class="browser">
+        <div class="bar"><span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
+          <div class="addr"><svg viewBox="0 0 16 16"><path d="M4 7V5a4 4 0 0 1 8 0v2h1v8H3V7h1zm2 0h4V5a2 2 0 0 0-4 0v2z" fill="#5d6b7a"/></svg>Portal medassure · Panel de control</div></div>
+        <div class="vp">
+          <div class="app">
+            <div class="top">
+              <div><div class="org">NXT GROUPDOC</div><div class="pt">Panel de control</div><div class="acc">jhc-medassure-beauty</div></div>
+              <div class="user"><i>CL</i>Su clínica</div>
+            </div>
+            <div class="kpis">
+              <div class="kpi"><div class="k">N.º de contrato</div><div class="v">•••••</div><div class="h">Contrato marco</div></div>
+              <div class="kpi"><div class="k">Clínica / consulta</div><div class="v">1</div><div class="h">Entradas asociadas</div></div>
+              <div class="kpi"><div class="k">Inicio</div><div class="v">21/08/2026</div><div class="h">Inicio del contrato</div></div>
+              <div class="kpi cta"><div class="newbtn" id="nb">+ Nuevo contrato</div></div>
+            </div>
+            <div class="panels dim">
+              <div class="panel"><h4>Contrato marco <span>⌃</span></h4>
+                <div class="grid2">
+                  <div><div class="k">Inicio del contrato</div><div class="v">21/08/2026</div></div>
+                  <div><div class="k">Fin del contrato</div><div class="v">31/12/2026</div></div>
+                  <div><div class="k">Validez nacional</div><div class="v">Sí</div></div>
+                  <div><div class="k">Validez internacional</div><div class="v">Sí</div></div>
+                </div>
+              </div>
+              <div class="panel"><h4>Confirmaciones <span>⌃</span></h4>
+                <div class="daterow"><div class="f"><div class="k">Desde</div><div class="in">01/10/2026</div></div><div class="f"><div class="k">Hasta</div><div class="in">31/10/2026</div></div><div class="b">Actualizar</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ring" data-t="#nb"></div>
+      <div class="badge" data-t="#nb" data-p="tl">2</div>
+    </div>
+  </div>
+  <div class="ftr"><span>medassure beauty · Guía del portal</span><span>4</span></div>
+</section>
+
+<!-- ============ 5. DATOS PACIENTE ============ -->
+<section class="slide">
+  <div class="hdr"><img class="ma" src="assets/logo_medassure.png" alt=""><img class="jhc" src="assets/logo_jhc.png" alt=""></div>
+  <div class="title">
+    <div class="kicker"><span class="pill">Paso 4</span> Alta de pacientes</div>
+    <h1>Introduzca los datos y guarde</h1>
+  </div>
+  <div class="body" style="gap:52px">
+    <div class="steps" style="width:500px; gap:26px">
+      <div class="step"><div class="num acc">A</div><p><b>Datos personales</b> del paciente.</p></div>
+      <div class="step"><div class="num acc">B</div><p><b>Fecha de la operación</b> (= inicio del seguro) y médico.</p></div>
+      <div class="step"><div class="num acc">C</div><p><b>Tarifa:</b> tratamiento(s), vigencia y Básica o Premium.</p></div>
+      <div class="step"><div class="num acc">D</div><p>Haga clic en <b>«Guardar»</b>.</p></div>
+      <div class="note ok">El paciente recibe la confirmación del seguro por correo electrónico en pocos minutos.</div>
+    </div>
+    <div class="shot">
+      <div class="browser">
+        <div class="bar"><span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
+          <div class="addr"><svg viewBox="0 0 16 16"><path d="M4 7V5a4 4 0 0 1 8 0v2h1v8H3V7h1zm2 0h4V5a2 2 0 0 0-4 0v2z" fill="#5d6b7a"/></svg>Portal medassure · Nuevo contrato</div></div>
+        <div class="vp">
+          <div class="form">
+            <div class="crumb">Panel de control › <b>Nuevo contrato</b></div>
+            <div class="fcols">
+              <div style="display:flex; flex-direction:column; gap:14px">
+                <div class="card"><h5>Producto</h5>
+                  <div class="r2">
+                    <div class="f2"><div class="k">Producto</div><div class="in">medassure beauty</div></div>
+                    <div class="f2"><div class="k">País de tratamiento</div><div class="in">España</div></div>
+                  </div>
+                </div>
+                <div class="card" id="cardA"><h5>Datos personales</h5>
+                  <div class="r2">
+                    <div class="f2"><div class="k">Nombre</div><div class="in">María</div></div>
+                    <div class="f2"><div class="k">Apellidos</div><div class="in">García López</div></div>
+                    <div class="f2"><div class="k">Calle</div><div class="in">Calle Mayor</div></div>
+                    <div class="f2"><div class="k">N.º</div><div class="in">12</div></div>
+                    <div class="f2"><div class="k">Código postal</div><div class="in">28013</div></div>
+                    <div class="f2"><div class="k">Localidad</div><div class="in">Madrid</div></div>
+                    <div class="f2"><div class="k">Fecha de nacimiento</div><div class="in">14.03.1985</div></div>
+                    <div class="f2"><div class="k">Residencia</div><div class="in">España</div></div>
+                    <div class="f2"><div class="k">Correo electrónico</div><div class="in">maria.garcia@email.es</div></div>
+                    <div class="f2"><div class="k">Teléfono</div><div class="in">600 000 000</div></div>
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:14px">
+                <div class="card" id="cardB"><h5>Datos de la intervención</h5>
+                  <div class="r2">
+                    <div class="f2"><div class="k">Fecha de la operación</div><div class="in">15.10.2026</div></div>
+                    <div class="f2"><div class="k">Médico / centro</div><div class="in">Dr. Ejemplo</div></div>
+                  </div>
+                </div>
+                <div class="card" id="cardC"><h5>Tarifa</h5>
+                  <div class="f2 full"><div class="k">Tratamientos (máx. 4)</div><div class="in">Blefaroplastia (párpados) ▾</div></div>
+                  <div class="slider"><div class="fill"></div><div class="knob"></div></div>
+                  <div class="ticks"><span>1 año</span><b>2 años</b><span>5 años</span></div>
+                  <div class="toggle"><b>Básica</b><span class="sw"></span><span>Premium</span></div>
+                  <div class="chk"><i></i>Añadir también beHappy</div>
+                  <div class="sum">
+                    <div class="tot"><span>Importe total</span><span style="font-weight:500; font-size:16px; color:var(--muted)">se calcula automáticamente</span></div>
+                  </div>
+                </div>
+                <div class="actions"><span class="c">Cancelar</span><span class="s" id="sv">Guardar</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="badge" data-t="#cardA" data-p="tl">A</div>
+      <div class="badge" data-t="#cardB" data-p="tl">B</div>
+      <div class="badge" data-t="#cardC" data-p="tl">C</div>
+      <div class="ring" data-t="#sv"></div>
+      <div class="badge" data-t="#sv" data-p="tr">D</div>
+    </div>
+  </div>
+  <div class="ftr"><span>medassure beauty · Guía del portal</span><span>5</span></div>
+</section>
+
+<!-- ============ 6. FACTURA ============ -->
+<section class="slide">
+  <div class="hdr"><img class="ma" src="assets/logo_medassure.png" alt=""><img class="jhc" src="assets/logo_jhc.png" alt=""></div>
+  <div class="title">
+    <div class="kicker"><span class="pill">Cada mes</span> Facturación</div>
+    <h1>Una sola factura al mes</h1>
+  </div>
+  <div class="body" style="gap:56px">
+    <div class="steps" style="width:560px">
+      <div class="callouts">
+        <div class="co"><div class="num acc">1</div><p>A principios de cada mes recibe la <b>factura del mes anterior</b>.<span>Con el listado de todos los seguros dados de alta (siguiente página).</span></p></div>
+        <div class="co"><div class="num acc">2</div><p><b>Importe total</b> a pagar.<span>Exento de impuestos.</span></p></div>
+        <div class="co"><div class="num acc">3</div><p>Pago por <b>transferencia</b> en un plazo de <b>10 días</b>, sin deducciones.<span>Únicamente a la cuenta indicada en la factura.</span></p></div>
+      </div>
+    </div>
+    <div class="shot">
+      <div class="browser" style="border-radius:10px">
+        <div class="vp">
+          <div class="inv">
+            <div class="stamp">EJEMPLO</div>
+            <div class="ih">
+              <div class="l"><img src="assets/logo_medassure.png" alt=""><div style="font-size:14px; color:#666; margin-top:16px">JHC Service GmbH · Konrad-Adenauer-Ufer 39 · 50668 Köln (Alemania)</div>
+                <div style="font-size:18px; margin-top:8px; line-height:1.45">Clínica Ejemplo<br>Calle Ejemplo 1 · 28001 Madrid</div></div>
+              <div class="r"><img src="assets/logo_jhc.png" alt=""><br>Konrad-Adenauer-Ufer 39 · 50668 Köln<br>Tel. +49 (0)221 390 99 55-30<br>kontakt@jhc-service.de · www.jhc-service.de</div>
+            </div>
+            <div class="meta" id="invmeta">
+              <h3 id="invno">Factura n.º 220384</h3>
+              <div class="mm">N.º de cliente: <b>10001</b><br>Fecha: <b>09/11/2026</b></div>
+            </div>
+            <div class="on">Facturación de medassure por encargo y en nombre de AmTrust International Underwriters DAC, 40 Westland Row, Dublín 2, Irlanda</div>
+            <table>
+              <thead><tr><th style="width:40px">Pos.</th><th>Concepto</th><th class="n">Importe</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>medassure beauty – octubre de 2026 (según listado adjunto)</td><td class="n">99,00 EUR</td></tr>
+                <tr><td></td><td>Total neto (exento de impuestos)</td><td class="n">99,00 EUR</td></tr>
+                <tr class="t" id="totrow"><td></td><td>Importe total</td><td class="n">99,00 EUR</td></tr>
+              </tbody>
+            </table>
+            <div class="pay" id="paybox">Le rogamos abone la factura antes del <b>19/11/2026</b>, sin deducciones, únicamente a nuestra cuenta:<br>
+              <span class="bank">Commerzbank AG, Colonia · IBAN DE80 3704 0044 0506 3813 00 · BIC COBADEFFXXX</span></div>
+            <div class="legal">Amtsgericht Köln, HRB 37364 · Gerentes: Uwe Jahnke, Christian Wilhelm Hoyer · N.º fiscal 215/5823/1521</div>
+          </div>
+        </div>
+      </div>
+      <div class="ring" data-t="#invmeta"></div>
+      <div class="badge" data-t="#invmeta" data-p="l">1</div>
+      <div class="ring" data-t="#totrow"></div>
+      <div class="badge" data-t="#totrow" data-p="l">2</div>
+      <div class="ring" data-t="#paybox"></div>
+      <div class="badge" data-t="#paybox" data-p="l">3</div>
+    </div>
+  </div>
+  <div class="ftr"><span>medassure beauty · Guía del portal</span><span>6</span></div>
+</section>
+
+<!-- ============ 7. LISTADO ============ -->
+<section class="slide">
+  <div class="hdr"><img class="ma" src="assets/logo_medassure.png" alt=""><img class="jhc" src="assets/logo_jhc.png" alt=""></div>
+  <div class="title">
+    <div class="kicker"><span class="pill">Cada mes</span> Facturación</div>
+    <h1>Listado de seguros contratados</h1>
+  </div>
+  <div class="body" style="flex-direction:column; gap:0">
+    <div class="lst-head"><span><b>10001 · Clínica Ejemplo</b></span><span>Octubre de 2026 · <span style="color:var(--accent); font-weight:700">EJEMPLO</span></span></div>
+    <table class="lst">
+      <thead><tr><th>Apellidos</th><th>Nombre</th><th>Fecha op.</th><th>Intervención 1</th><th>Intervención 2</th><th>Vigencia</th><th class="n">Precio</th></tr></thead>
+      <tbody>
+        <tr><td>García López</td><td>María</td><td>15/10/2026</td><td>Blefaroplastia (párpados sup./inf.)</td><td>—</td><td>2 años</td><td class="n">99,00 €</td></tr>
+      </tbody>
+      <tfoot><tr><td colspan="6">Total del mes</td><td class="n">99,00 €</td></tr></tfoot>
+    </table>
+    <div class="note" style="margin-top:34px; max-width:1300px">Revise el listado: si falta algún paciente o hay un dato incorrecto, avísenos antes de pagar y lo corregimos.</div>
+  </div>
+  <div class="ftr"><span>medassure beauty · Guía del portal</span><span>7</span></div>
+</section>
+
+<!-- ============ 8. CONTACTO ============ -->
+<section class="slide">
+  <div class="hdr"><img class="ma" src="assets/logo_medassure.png" alt=""><img class="jhc" src="assets/logo_jhc.png" alt=""></div>
+  <div class="title">
+    <div class="kicker">Contacto</div>
+    <h1>¿Dudas? Estamos para ayudarle</h1>
+  </div>
+  <div class="contact">
+    <div class="person">
+      <div class="role">Distribución medassure · España</div>
+      <div class="name">Samuel Wörmer</div>
+      <div class="lines">
+        <div class="ln"><svg viewBox="0 0 24 24" fill="none" stroke="#9fd0f5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>(+34) 672 69 68 21</div>
+        <div class="ln"><svg viewBox="0 0 24 24" fill="none" stroke="#9fd0f5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>samuel.woermer@iberassekuranz.es</div>
+      </div>
+      <div style="margin-top:44px; padding-top:28px; border-top:2px solid rgba(255,255,255,.18); font-size:25px; line-height:1.5; color:#d5e6f5">Escríbame o llámeme para cualquier duda sobre el acceso al portal, el alta de pacientes o la facturación.</div>
+    </div>
+    <div class="company">
+      <div class="cn">IberAssekuranz Brokers<br>Correduría de Seguros, S.L.</div>
+      <div class="dgs">Autorizada D.G.S. J-2929</div>
+      <div class="office"><div class="o">Madrid</div><div class="a">Calle Princesa 25, 2-8 · 28008 Madrid<br>Tel. (+34) 91 781 56 32</div></div>
+      <div class="office"><div class="o">Barcelona</div><div class="a">Calle de Trafalgar nº 6, 2º 21ª · 08010 Barcelona<br>Tel. (+34) 93 215 43 65</div></div>
+    </div>
+  </div>
+  <div class="ftr"><span>medassure beauty · Guía del portal</span><span>8</span></div>
+</section>
+
+<script>
+function place(){
+  document.querySelectorAll('.ring[data-t], .badge[data-t]').forEach(function(el){
+    var shot=el.closest('.shot'); var t=shot.querySelector(el.dataset.t);
+    var sr=shot.getBoundingClientRect(), r=t.getBoundingClientRect();
+    var x=r.left-sr.left, y=r.top-sr.top;
+    if(el.classList.contains('ring')){ var p=10; el.style.left=(x-p)+'px'; el.style.top=(y-p)+'px'; el.style.width=(r.width+2*p)+'px'; el.style.height=(r.height+2*p)+'px'; }
+    else { var p=el.dataset.p||'tl';
+      if(p==='tl'){ el.style.left=(x-10-27)+'px'; el.style.top=(y-10-27)+'px'; }
+      else if(p==='tr'){ el.style.left=(x+r.width+10-27)+'px'; el.style.top=(y-10-27)+'px'; }
+      else { el.style.left=(x-10-27-34)+'px'; el.style.top=(y+r.height/2-27)+'px'; } }
+  });
+}
+document.fonts.ready.then(place);
+</script>
+</body>
+</html>
