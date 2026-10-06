@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Carrusel medassure beauty</title>
+<style>
+  :root {
+    --navy: #0f1c2e;
+    --navy-2: #172a44;
+    --gold: #e0a020;
+    --gold-soft: #f3d38a;
+    --cream: #faf6ee;
+    --ink: #0f1c2e;
+    --muted: #8a97ab;
+    --red: #e2574c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  @page { size: 1080px 1350px; margin: 0; }
+  body { font-family: "Inter", "Inter Display", sans-serif; background: #333; }
+  .slide {
+    width: 1080px; height: 1350px; position: relative; overflow: hidden;
+    padding: 110px 96px 120px; display: flex; flex-direction: column;
+    page-break-after: always; break-after: page;
+    background: var(--navy); color: #fff;
+  }
+  .slide.light { background: var(--cream); color: var(--ink); }
+  .brand {
+    position: absolute; left: 96px; bottom: 56px; display: flex; align-items: baseline; gap: 12px;
+    font-family: "Inter Display"; font-weight: 700; font-size: 30px; color: var(--gold); letter-spacing: -0.5px;
+  }
+  .brand span { font-weight: 400; color: var(--muted); font-size: 24px; letter-spacing: 3px; }
+  .light .brand span { color: #6b778a; }
+  .pager { position: absolute; right: 96px; bottom: 60px; font-size: 24px; color: var(--muted); font-weight: 500; letter-spacing: 2px; }
+  .kicker { font-size: 28px; font-weight: 600; letter-spacing: 5px; text-transform: uppercase; color: var(--gold); margin-bottom: 36px; }
+  h1 { font-family: "Inter Display"; font-weight: 800; font-size: 92px; line-height: 1.02; letter-spacing: -3px; }
+  h2 { font-family: "Inter Display"; font-weight: 800; font-size: 76px; line-height: 1.05; letter-spacing: -2.5px; }
+  .gold { color: var(--gold); }
+  .lead { font-size: 38px; line-height: 1.35; font-weight: 400; margin-top: 40px; color: #d5dce7; }
+  .light .lead { color: #3c4a5e; }
+  .swipe { margin-top: auto; margin-bottom: 40px; font-size: 32px; font-weight: 600; color: var(--gold); }
+
+  /* Portada */
+  .cover { padding: 0; }
+  .cover .photo { height: 560px; background: url("foto_cirugia.jpg") center 30% / cover; position: relative; }
+  .cover .photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,28,46,0) 40%, var(--navy) 100%); }
+  .cover .body { padding: 20px 96px 130px; display: flex; flex-direction: column; flex: 1; }
+  .cover h1 { font-size: 84px; }
+
+  /* Listas */
+  .list { list-style: none; margin-top: 72px; display: flex; flex-direction: column; gap: 40px; }
+  .list li { font-size: 48px; line-height: 1.25; padding-left: 64px; position: relative; font-weight: 500; }
+  .list li::before { content: ""; position: absolute; left: 0; top: 18px; width: 30px; height: 30px; border-radius: 50%; background: var(--gold); }
+  .list.x li::before { background: var(--red); }
+
+  .callout { margin-top: auto; margin-bottom: 40px; border-left: 8px solid var(--gold); padding: 8px 0 8px 36px; font-size: 42px; line-height: 1.3; font-weight: 600; }
+
+  /* Comparativa RC */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 72px; }
+  .card { border-radius: 28px; padding: 56px 44px; background: var(--navy-2); }
+  .light .card { background: #fff; box-shadow: 0 2px 0 rgba(15,28,46,.06), 0 18px 40px rgba(15,28,46,.08); }
+  .card h3 { font-size: 30px; letter-spacing: 3px; text-transform: uppercase; font-weight: 700; margin-bottom: 22px; }
+  .card p { font-size: 40px; line-height: 1.35; }
+  .card .verdict { margin-top: 44px; font-weight: 800; font-size: 44px; font-family: "Inter Display"; }
+  .ok { color: #2e9e6b; }
+  .no { color: var(--red); }
+
+  /* Quién paga */
+  .payers { display: flex; flex-direction: column; gap: 24px; margin-top: 56px; }
+  .payer { display: grid; grid-template-columns: 90px 1fr; gap: 28px; align-items: start; background: var(--navy-2); border-radius: 24px; padding: 34px 36px; }
+  .payer .n { font-family: "Inter Display"; font-size: 64px; font-weight: 800; color: var(--gold); line-height: 1; }
+  .payer b { display: block; font-size: 40px; margin-bottom: 8px; }
+  .payer span { font-size: 32px; color: #c3ccd9; line-height: 1.35; }
+
+  /* Capas */
+  .layers { margin-top: 64px; display: flex; flex-direction: column; gap: 0; }
+  .layer { border-radius: 28px; padding: 40px 44px; display: grid; grid-template-columns: 1fr auto; align-items: center; }
+  .layer h3 { font-family: "Inter Display"; font-size: 46px; font-weight: 800; letter-spacing: -1px; }
+  .layer p { font-size: 32px; margin-top: 8px; line-height: 1.3; }
+  .layer .tag { font-size: 26px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; padding: 12px 20px; border-radius: 999px; }
+  .layer.rc { background: #fff; color: var(--ink); box-shadow: 0 18px 40px rgba(15,28,46,.08); }
+  .layer.rc .tag { background: #e9edf3; color: #3c4a5e; }
+  .layer.ma { background: var(--navy); color: #fff; margin-top: -10px; }
+  .layer.ma p { color: #c3ccd9; }
+  .layer.ma .tag { background: var(--gold); color: var(--navy); }
+  .plus { text-align: center; font-size: 60px; font-weight: 800; color: var(--gold); margin: 6px 0; line-height: 1; }
+
+  /* Cifras */
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; margin-top: 56px; }
+  .stat { background: var(--navy-2); border-radius: 26px; padding: 40px 38px; }
+  .stat .big { font-family: "Inter Display"; font-size: 88px; font-weight: 800; color: var(--gold); letter-spacing: -3px; line-height: 1; }
+  .stat .lbl { font-size: 30px; line-height: 1.3; color: #d5dce7; margin-top: 16px; }
+  .stat.wide { grid-column: 1 / -1; }
+  .fine { font-size: 24px; color: var(--muted); margin-top: 28px; line-height: 1.4; }
+
+  /* Covers */
+  .chips { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 48px; }
+  .chip { font-size: 32px; font-weight: 600; padding: 18px 28px; border-radius: 999px; background: #fff; color: var(--ink); box-shadow: 0 6px 18px rgba(15,28,46,.08); }
+  .chip.g { background: var(--gold); color: var(--navy); }
+
+  /* Estándar */
+  .reasons { display: flex; flex-direction: column; gap: 34px; margin-top: 56px; }
+  .reason { display: grid; grid-template-columns: 76px 1fr; gap: 26px; }
+  .reason .i { width: 76px; height: 76px; border-radius: 20px; background: var(--gold); color: var(--navy); font-family: "Inter Display"; font-weight: 800; font-size: 40px; display: flex; align-items: center; justify-content: center; }
+  .reason b { font-size: 38px; display: block; }
+  .reason span { font-size: 31px; color: #3c4a5e; line-height: 1.35; display: block; margin-top: 6px; }
+
+  .cta-q { font-family: "Inter Display"; font-weight: 800; font-size: 80px; line-height: 1.06; letter-spacing: -2.5px; margin-top: 40px; }
+  .web { margin-top: auto; margin-bottom: 40px; font-size: 34px; color: #d5dce7; line-height: 1.6; }
+  .web b { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<!-- 1 · Portada / gancho -->
+<section class="slide cover">
+  <div class="photo"></div>
+  <div class="body">
+    <div class="kicker">Cirugía estética</div>
+    <h1>La cirugía salió perfecta.<br><span class="gold">Y aun así se complicó.</span></h1>
+    <p class="lead">¿Quién paga cuando nadie se ha equivocado?</p>
+    <div class="swipe">Desliza →</div>
+  </div>
+  <div class="brand">medassure <span>BEAUTY</span></div>
+  <div class="pager">01 / 09</div>
+</section>
+
+<!-- 2 · El riesgo cero no existe -->
+<section class="slide">
+  <div class="kicker">El riesgo cero no existe</div>
+  <h2>Técnica impecable.<br>Indicación correcta.<br><span class="gold">Y a las 3 semanas…</span></h2>
+  <ul class="list x">
+    <li>Una infección</li>
+    <li>Un seroma o un hematoma</li>
+    <li>Una contractura capsular</li>
+    <li>Una necrosis que obliga a reintervenir</li>
+  </ul>
+  <div class="callout">Ninguna intervención está exenta de riesgo. Ni siquiera las mejor hechas.</div>
+  <div class="brand">medassure <span>BEAUTY</span></div>
+  <div class="pager">02 / 09</div>
+</section>
+
+<!-- 3 · La RC no llega -->
+<section class="slide light">
+  <div class="kicker">El hueco que casi nadie explica</div>
+  <h2>Sin error, la RC profesional <span style="color:var(--red)">no responde.</span></h2>
+  <div class="compare">
+    <div class="card">
+      <h3>Mala praxis</h3>
+      <p>Hay un error o una negligencia del profesional.</p>
+      <div class="verdict ok">✓ Cubre la RC</div>
+    </div>
+    <div class="card">
+      <h3>Complicación fortuita</h3>
+      <p>Todo se hizo bien, pero el cuerpo reacciona mal.</p>
+      <div class="verdict no">✕ La RC no entra</div>
+    </div>
+  </div>
+  <div class="callout" style="color:var(--ink)">La responsabilidad civil cubre el <u>error</u>.<br>No cubre el <u>riesgo</u>.</div>
+  <div class="brand">medassure <span>BEAUTY</span></div>
+  <div class="pager">03 / 09</div>
+</section>
+
+<!-- 4 · Quién paga hoy -->
+<section class="slide">
+  <div class="kicker">Entonces, ¿quién paga la revisión?</div>
+  <h2>Hoy, alguien<br>siempre <span class="gold">pierde.</span></h2>
+  <div class="payers">
+    <div class="payer"><div class="n">1</div><div><b>El paciente</b><span>Una factura que no esperaba: quirófano, anestesia, clínica, medicación.</span></div></div>
+    <div class="payer"><div class="n">2</div><div><b>La clínica</b><span>Reinterviene «por cortesía» para proteger su reputación. Y lo paga de su margen.</span></div></div>
+    <div class="payer"><div class="n">3</div><div><b>La Seguridad Social</b><span>Puede denegar la atención al tratarse de una cirugía estética privada.</span></div></div>
+  </div>
+  <div class="brand">medassure <span>BEAUTY</span></div>
+  <div class="pager">04 / 09</div>
+</section>
+
+<!-- 5 · La pieza que faltaba -->
+<section class="slide light">
+  <div class="kicker">La pieza que faltaba</div>
+  <h2>medassure beauty</h2>
+  <p class="lead">Seguro de reembolso de gastos derivados de <b>complicaciones fortuitas</b> en cirugía estética.</p>
+  <div class="chips">
+    <span class="chip g">Mama</span><span class="chip g">Cuerpo</span><span class="chip g">Cara</span><span class="chip g">Glúteos</span><span class="chip g">Procedimientos complejos</span>
+  </div>
+  <div class="chips" style="margin-top:28px">
+    <span class="chip">Honorarios médicos</span><span class="chip">Anestesia</span><span class="chip">Quirófano</span><span class="chip">Días de clínica</span><span class="chip">Medicamentos</span><span class="chip">Material y laboratorio</span><span class="chip">UCI privada</span><span class="chip">Hospital público</span>
+  </div>
+  <div class="callout" style="color:var(--ink)">Protección por accidente incluida.</div>
+  <div class="brand">medassure <span>BEAUTY</span></div>
+  <div class="pager">05 / 09</div>
+</section>
+
+<!-- 6 · Dos capas -->
+<section class="slide light">
+  <div class="kicker">No sustituye. Complementa.</div>
+  <h2>Protección completa = <span class="gold">dos capas</span></h2>
+  <div class="layers">
+    <div class="layer rc">
+      <div><h3>RC profesional</h3><p>Protege al profesional frente al <b>error</b>.</p></div>
+      <div class="tag">Imprescindible</div>
+    </div>
+    <div class="plus">+</div>
+    <div class="layer ma">
+      <div><h3>medassure beauty</h3><p>Protege al paciente y a la clínica frente al <b style="color:#fff">riesgo</b> que nadie puede eliminar.</p></div>
+      <div class="tag">El nuevo estándar</div>
+    </div>
+  </div>
+  <div class="callout" style="color:var(--ink)">Una sin la otra deja a alguien al descubierto.</div>
+  <div class="brand">medassure <span>BEAUTY</span></div>
+  <div class="pager">06 / 09</div>
+</section>
+
+<!-- 7 · Cifras -->
+<section class="slide">
+  <div class="kicker">En cifras</div>
+  <h2>Lo que cubre,<br>en <span class="gold">números.</span></h2>
+  <div class="stats">
+    <div class="stat"><div class="big">15.000€</div><div class="lbl">Cobertura principal (Premium). 10.000 € en Base.</div></div>
+    <div class="stat"><div class="big">150.000€</div><div class="lbl">Si la complicación pone en peligro la vida y se deriva al hospital público.</div></div>
+    <div class="stat"><div class="big">4</div><div class="lbl">Intervenciones por póliza (Premium). 3 en Base.</div></div>
+    <div class="stat"><div class="big">69€</div><div class="lbl">Prima desde (cabeza/cara, 1 año, Base). IPS incluido.</div></div>
+  </div>
+  <p class="fine">★ En complicaciones que ponen en peligro la vida, medassure asume la reclamación a la Seguridad Social. Condiciones y primas según zona, modalidad y duración.</p>
+  <div class="brand">medassure <span>BEAUTY</span></div>
+  <div class="pager">07 / 09</div>
+</section>
+
+<!-- 8 · Por qué se está convirtiendo en estándar -->
+<section class="slide light">
+  <div class="kicker">Por qué se está convirtiendo en estándar</div>
+  <h2>Como el consentimiento informado: <span class="gold">ya no es un extra.</span></h2>
+  <div class="reasons">
+    <div class="reason"><div class="i">1</div><div><b>El paciente ya lo pregunta</b><span>Ya no solo quiere saber quién le opera, sino qué pasa si algo se complica.</span></div></div>
+    <div class="reason"><div class="i">2</div><div><b>Convierte el riesgo en confianza</b><span>Hablar de complicaciones deja de ser incómodo cuando tienes la respuesta.</span></div></div>
+    <div class="reason"><div class="i">3</div><div><b>Protege la relación médico-paciente</b><span>Una complicación cubierta no acaba en conflicto ni en reclamación.</span></div></div>
+    <div class="reason"><div class="i">4</div><div><b>Se acabaron las revisiones «gratis»</b><span>La clínica deja de absorber costes que no le corresponden.</span></div></div>
+  </div>
+  <div class="brand">medassure <span>BEAUTY</span></div>
+  <div class="pager">08 / 09</div>
+</section>
+
+<!-- 9 · CTA -->
+<section class="slide">
+  <div class="kicker">Te leo en comentarios</div>
+  <div class="cta-q">En tu clínica, ¿quién asume hoy una complicación <span class="gold">en la que nadie tuvo la culpa?</span></div>
+  <div class="web"><b>www.medassure.es</b><br>info@medassure.es</div>
+  <div class="brand">medassure <span>BEAUTY</span></div>
+  <div class="pager">09 / 09</div>
+</section>
+
+</body>
+</html>
