@@ -71,12 +71,12 @@
   .ov .d { font-size: 21px; color: var(--muted); margin-top: 8px; line-height: 1.35; }
 
   /* ---------- slide 2: website ---------- */
-  .site-nav { height: 96px; display: flex; align-items: center; padding: 0 40px; gap: 26px; border-bottom: 1px solid #edf0f3; }
+  .site-nav { height: 96px; display: flex; align-items: center; padding: 0 28px; gap: 18px; white-space: nowrap; border-bottom: 1px solid #edf0f3; }
   .site-nav img { height: 40px; }
-  .site-nav .items { display: flex; gap: 22px; font-size: 19px; color: #2b3540; margin-left: 18px; }
+  .site-nav .items { display: flex; gap: 18px; font-size: 19px; color: #2b3540; margin-left: 8px; }
   .site-nav .help { font-size: 19px; color: #2b3540; margin-left: auto; }
   .site-nav .login { font-size: 19px; font-weight: 600; color: #1f2a36; border: 2px solid #1f2a36; border-radius: 6px; padding: 9px 18px; position: relative; }
-  .site-nav .soc { display: flex; gap: 10px; }
+  .site-nav .soc { display: flex; gap: 8px; }
   .site-nav .soc i { width: 18px; height: 18px; border-radius: 4px; background: #2b3540; display: block; }
   .hero { position: absolute; top: 96px; left: 0; right: 0; height: 470px; background: linear-gradient(90deg, #f1f3f5 0%, #f4f5f7 55%, #fff 100%); }
   .hero img { position: absolute; right: 30px; top: 0; height: 470px; -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 22%, #000 85%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0%, #000 22%, #000 85%, transparent 100%); }
@@ -208,6 +208,36 @@
   .office { margin-top: 30px; padding-top: 26px; border-top: 2px solid var(--line); }
   .office .o { font-size: 20px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--blue-d); }
   .office .a { font-size: 26px; color: var(--text); margin-top: 8px; line-height: 1.4; }
+
+  /* ---------- slide 6 v2: real invoice layout ---------- */
+  .inv2 { position: absolute; inset: 0; padding: 20px 40px; background: #fff; color: #1a1a1a; font-family: Arial, "Liberation Sans", sans-serif; }
+  .inv2 .top2 { display: flex; justify-content: space-between; }
+  .inv2 .lg { height: 44px; }
+  .inv2 .sender { font-size: 12.5px; color: #444; margin-top: 12px; }
+  .inv2 .rcpt { font-size: 17px; line-height: 1.35; margin-top: 6px; }
+  .inv2 .r { text-align: right; font-size: 14px; line-height: 1.4; color: #333; }
+  .inv2 .lg2 { height: 54px; margin-bottom: 4px; }
+  .inv2 .meta2 { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 22px; }
+  .inv2 .rn { font-size: 26px; font-weight: 700; }
+  .inv2 .fa { font-size: 16px; margin-top: 2px; }
+  .inv2 .kv { font-size: 18px; border-collapse: collapse; }
+  .inv2 .kv td { padding: 1px 0 1px 22px; text-align: right; }
+  .inv2 .kv td:first-child { text-align: left; }
+  .inv2 .ins { font-size: 14.5px; color: #333; margin-top: 18px; }
+  .inv2 .pos { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 17px; border: 1.5px solid #222; }
+  .inv2 .pos th { text-align: left; font-weight: 400; font-size: 15px; padding: 5px 10px; border-bottom: 1.5px solid #222; border-right: 1.5px solid #222; }
+  .inv2 .pos td { padding: 7px 10px; border-right: 1.5px solid #222; }
+  .inv2 .pos .n { text-align: right; white-space: nowrap; }
+  .inv2 .pos tr.t td { font-weight: 700; font-size: 19px; border-top: 2.5px solid #222; padding: 8px 10px; }
+  .inv2 .pay2 { margin-top: 26px; font-size: 16px; line-height: 1.5; }
+  .inv2 .bank { display: inline-block; margin-top: 4px; background: #f3f5f7; border-radius: 6px; padding: 5px 12px; font-weight: 700; }
+  .inv2 .legal2 { position: absolute; left: 40px; right: 40px; bottom: 14px; border-top: 1px solid #333; padding-top: 7px; font-size: 12.5px; color: #444; display: flex; flex-direction: column; gap: 2px; }
+  .lst { font-size: 21px; }
+  .lst thead th { font-size: 18px; padding: 16px 14px; }
+  .lst td { padding: 16px 14px; }
+  .lst-notes { display: flex; gap: 40px; margin-top: 30px; align-items: flex-start; }
+  .lst-notes .co { flex: 1.1; }
+  .lst-notes .note { flex: 1; margin-top: 0; }
 </style>
 </head>
 <body>
@@ -223,7 +253,7 @@
     <div class="rule"></div>
   </div>
   <div class="overview">
-    <div class="ov"><div class="n">Paso 1</div><div class="t">Abrir el portal</div><div class="d">medassure.de → «Iniciar sesión»</div></div>
+    <div class="ov"><div class="n">Paso 1</div><div class="t">Abrir el portal</div><div class="d">medassure.es → «Iniciar sesión»</div></div>
     <div class="ov"><div class="n">Paso 2</div><div class="t">Iniciar sesión</div><div class="d">Con su correo y contraseña</div></div>
     <div class="ov"><div class="n">Paso 3</div><div class="t">Nuevo contrato</div><div class="d">Desde el panel de control</div></div>
     <div class="ov"><div class="n">Paso 4</div><div class="t">Datos del paciente</div><div class="d">Rellenar y guardar</div></div>
@@ -241,18 +271,18 @@
   </div>
   <div class="body">
     <div class="steps">
-      <div class="step"><div class="num">1</div><p>Abra el navegador y entre en:<br><span class="url">https://medassure.de</span></p></div>
+      <div class="step"><div class="num">1</div><p>Abra el navegador y entre en:<br><span class="url">https://medassure.es</span></p></div>
       <div class="step"><div class="num">2</div><p>Se abre la página de inicio de medassure.</p></div>
       <div class="step"><div class="num acc">3</div><p>Haga clic en <b>«Iniciar sesión»</b>, arriba a la derecha.</p></div>
     </div>
     <div class="shot">
       <div class="browser">
         <div class="bar"><span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
-          <div class="addr"><svg viewBox="0 0 16 16"><path d="M4 7V5a4 4 0 0 1 8 0v2h1v8H3V7h1zm2 0h4V5a2 2 0 0 0-4 0v2z" fill="#5d6b7a"/></svg>medassure.de</div></div>
+          <div class="addr"><svg viewBox="0 0 16 16"><path d="M4 7V5a4 4 0 0 1 8 0v2h1v8H3V7h1zm2 0h4V5a2 2 0 0 0-4 0v2z" fill="#5d6b7a"/></svg>medassure.es</div></div>
         <div class="vp">
           <div class="site-nav">
-            <img src="assets/logo_medassure.png" alt="" style="height:44px">
-            <div class="items"><span>beauty</span><span>adipo</span><span>dental</span><span>ortopedia</span></div>
+            <img src="assets/logo_medassure.png" alt="" style="height:40px">
+            <div class="items"><span>beauty</span><span>adipo</span><span>cosmetics</span><span>dental</span><span>ortho</span></div>
             <span class="help">Ayuda y servicio ⌄</span>
             <span class="login" id="loginbtn">Iniciar sesión</span>
             <div class="soc"><i></i><i></i><i></i></div>
@@ -450,51 +480,57 @@
     <h1>Una sola factura al mes</h1>
   </div>
   <div class="body" style="gap:56px">
-    <div class="steps" style="width:560px">
+    <div class="steps" style="width:540px">
       <div class="callouts">
-        <div class="co"><div class="num acc">1</div><p>A principios de cada mes recibe la <b>factura del mes anterior</b>.<span>Con el listado de todos los seguros dados de alta (siguiente página).</span></p></div>
-        <div class="co"><div class="num acc">2</div><p><b>Importe total</b> a pagar.<span>Exento de impuestos.</span></p></div>
-        <div class="co"><div class="num acc">3</div><p>Pago por <b>transferencia</b> en un plazo de <b>10 días</b>, sin deducciones.<span>Únicamente a la cuenta indicada en la factura.</span></p></div>
+        <div class="co"><div class="num acc">1</div><p>Al mes siguiente recibe la <b>factura</b> de todos los seguros del mes.<span>Rechnung Nr. = n.º de factura · Kunden Nr. = n.º de cliente · Datum = fecha.</span></p></div>
+        <div class="co"><div class="num acc">2</div><p><b>Importe total</b> a pagar.<span>Prima neta + 0,15 % de impuesto sobre primas.</span></p></div>
+        <div class="co"><div class="num acc">3</div><p>Pago <b>inmediato por transferencia</b>, sin deducciones.<span>Únicamente a la cuenta de Commerzbank indicada.</span></p></div>
       </div>
     </div>
     <div class="shot">
       <div class="browser" style="border-radius:10px">
         <div class="vp">
-          <div class="inv">
+          <div class="inv2">
             <div class="stamp">EJEMPLO</div>
-            <div class="ih">
-              <div class="l"><img src="assets/logo_medassure.png" alt=""><div style="font-size:14px; color:#666; margin-top:16px">JHC Service GmbH · Konrad-Adenauer-Ufer 39 · 50668 Köln (Alemania)</div>
-                <div style="font-size:18px; margin-top:8px; line-height:1.45">Clínica Ejemplo<br>Calle Ejemplo 1 · 28001 Madrid</div></div>
-              <div class="r"><img src="assets/logo_jhc.png" alt=""><br>Konrad-Adenauer-Ufer 39 · 50668 Köln<br>Tel. +49 (0)221 390 99 55-30<br>kontakt@jhc-service.de · www.jhc-service.de</div>
+            <div class="top2">
+              <div class="l">
+                <img src="assets/logo_medassure.png" alt="" class="lg">
+                <div class="sender">JHC Service GmbH TH, Konrad-Adenauer-Ufer 39, 50668 Köln</div>
+                <div class="rcpt">Clínica Ejemplo Sol y Luna S.L.<br>Calle Inventada 0<br>08000 Barcelona<br>Spanien</div>
+              </div>
+              <div class="r">
+                <img src="assets/logo_jhc.png" alt="" class="lg2">
+                <div>Konrad-Adenauer-Ufer 39 · 50668 Köln<br>Telefon +49 (0)221 39099 55 66<br>Telefax +49 (0)221 39099 55 89<br>www.jhc-service.de</div>
+              </div>
             </div>
-            <div class="meta" id="invmeta">
-              <h3 id="invno">Factura n.º 220384</h3>
-              <div class="mm">N.º de cliente: <b>10001</b><br>Fecha: <b>09/11/2026</b></div>
+            <div class="meta2" id="invmeta">
+              <div><div class="rn">Rechnung Nr. 999999</div><div class="fa">Factura</div></div>
+              <table class="kv"><tr><td>Kunden Nr.:</td><td>12345</td></tr><tr><td>Datum:</td><td>11.05.2026</td></tr></table>
             </div>
-            <div class="on">Facturación de medassure por encargo y en nombre de AmTrust International Underwriters DAC, 40 Westland Row, Dublín 2, Irlanda</div>
-            <table>
-              <thead><tr><th style="width:40px">Pos.</th><th>Concepto</th><th class="n">Importe</th></tr></thead>
+            <div class="ins">medassure Billing por cuenta y en nombre de Nürnberger Krankenversicherung AG, Ostendstraße 100, 90334 Nuremberg, Alemania</div>
+            <table class="pos">
+              <thead><tr><th style="width:56px">Pos</th><th>Texto</th><th class="n">Precio total</th></tr></thead>
               <tbody>
-                <tr><td>1</td><td>medassure beauty – octubre de 2026 (según listado adjunto)</td><td class="n">99,00 EUR</td></tr>
-                <tr><td></td><td>Total neto (exento de impuestos)</td><td class="n">99,00 EUR</td></tr>
-                <tr class="t" id="totrow"><td></td><td>Importe total</td><td class="n">99,00 EUR</td></tr>
+                <tr><td>1</td><td>medassure beauty Facturación 04/2026 – imponible</td><td class="n">357,46 EUR</td></tr>
+                <tr><td>2</td><td>Impuesto de seguros del 0,15%</td><td class="n">0,54 EUR</td></tr>
+                <tr class="t" id="totrow"><td colspan="2">Importe total</td><td class="n">358,00 EUR</td></tr>
               </tbody>
             </table>
-            <div class="pay" id="paybox">Le rogamos abone la factura antes del <b>19/11/2026</b>, sin deducciones, únicamente a nuestra cuenta:<br>
-              <span class="bank">Commerzbank AG, Colonia · IBAN DE80 3704 0044 0506 3813 00 · BIC COBADEFFXXX</span></div>
-            <div class="legal">Amtsgericht Köln, HRB 37364 · Gerentes: Uwe Jahnke, Christian Wilhelm Hoyer · N.º fiscal 215/5823/1521</div>
+            <div class="pay2" id="paybox">La factura es pagadera inmediatamente sin deducción. Por favor, transfiera el importe únicamente a nuestra cuenta en<br>
+              <span class="bank">Commerzbank AG · IBAN: DE80 3704 0044 0506 3813 00 · BIC: COBADEFFXXX</span></div>
+            <div class="legal2"><span>Amtsgericht Köln, HRB 37364 · Geschäftsführer Dipl.-Kfm. Uwe Jahnke, Dipl.-Kfm. Christian Wilhelm Hoyer · Steuernummer 215/5823/1521</span><span>Zugelassener Versicherungsmakler gemäß § 34d Abs. 1 GewO · Reg.-Nr.: D-910V-NE1WI-82</span></div>
           </div>
         </div>
       </div>
-      <div class="ring" data-t="#invmeta"></div>
+      <div class="ring" data-t="#invmeta" data-pad="5"></div>
       <div class="badge" data-t="#invmeta" data-p="l">1</div>
-      <div class="ring" data-t="#totrow"></div>
+      <div class="ring" data-t="#totrow" data-pad="5"></div>
       <div class="badge" data-t="#totrow" data-p="l">2</div>
-      <div class="ring" data-t="#paybox"></div>
+      <div class="ring" data-t="#paybox" data-pad="6"></div>
       <div class="badge" data-t="#paybox" data-p="l">3</div>
     </div>
   </div>
-  <div class="ftr"><span>medassure beauty · Guía del portal</span><span>6</span></div>
+  <div class="ftr"><span>medassure beauty · Guía del portal · Datos de ejemplo ficticios</span><span>6</span></div>
 </section>
 
 <!-- ============ 7. LISTADO ============ -->
@@ -502,20 +538,24 @@
   <div class="hdr"><img class="ma" src="assets/logo_medassure.png" alt=""><img class="jhc" src="assets/logo_jhc.png" alt=""></div>
   <div class="title">
     <div class="kicker"><span class="pill">Cada mes</span> Facturación</div>
-    <h1>Listado de seguros contratados</h1>
+    <h1>Relación de recibos</h1>
   </div>
   <div class="body" style="flex-direction:column; gap:0">
-    <div class="lst-head"><span><b>10001 · Clínica Ejemplo</b></span><span>Octubre de 2026 · <span style="color:var(--accent); font-weight:700">EJEMPLO</span></span></div>
+    <div class="lst-head"><span><b>medassure beauty · CLÍNICA EJEMPLO SOL Y LUNA · 12345</b></span><span><b>04/2026</b> · <span style="color:var(--accent); font-weight:700">EJEMPLO</span></span></div>
     <table class="lst">
-      <thead><tr><th>Apellidos</th><th>Nombre</th><th>Fecha op.</th><th>Intervención 1</th><th>Intervención 2</th><th>Vigencia</th><th class="n">Precio</th></tr></thead>
+      <thead><tr><th>Apellidos</th><th>Nombre</th><th>Fecha de la OP</th><th>Tipo de operación 1</th><th>Tipo de operación 2</th><th>Tipo de operación 3</th><th>Duración</th><th class="n">Prima total</th><th class="n">Impuesto</th><th class="n">Prima neta</th></tr></thead>
       <tbody>
-        <tr><td>García López</td><td>María</td><td>15/10/2026</td><td>Blefaroplastia (párpados sup./inf.)</td><td>—</td><td>2 años</td><td class="n">99,00 €</td></tr>
+        <tr><td>EJEMPLO EJEMPLAR</td><td>ANA</td><td>17.04.2026</td><td>Rinoplastia</td><td>Aumento de mamas con implantes</td><td></td><td>1</td><td class="n">259,00</td><td class="n">0,39</td><td class="n">258,61</td></tr>
+        <tr><td>PRUEBA PRUEBAS</td><td>LUIS</td><td>24.04.2026</td><td>Blefaroplastia</td><td></td><td></td><td>2</td><td class="n">99,00</td><td class="n">0,15</td><td class="n">98,85</td></tr>
       </tbody>
-      <tfoot><tr><td colspan="6">Total del mes</td><td class="n">99,00 €</td></tr></tfoot>
+      <tfoot><tr><td colspan="7">Total</td><td class="n" id="lsttot">358,00</td><td class="n">0,54</td><td class="n">357,46</td></tr></tfoot>
     </table>
-    <div class="note" style="margin-top:34px; max-width:1300px">Revise el listado: si falta algún paciente o hay un dato incorrecto, avísenos antes de pagar y lo corregimos.</div>
+    <div class="lst-notes">
+      <div class="co"><div class="num">€</div><p>La suma de <b>«Prima total»</b> es el <b>importe total</b> de la factura.<span>Prima neta + impuesto sobre primas (0,15 %) = prima total. Duración en años.</span></p></div>
+      <div class="note">Revise la relación: si falta algún paciente o hay un dato incorrecto, avísenos antes de pagar y lo corregimos.</div>
+    </div>
   </div>
-  <div class="ftr"><span>medassure beauty · Guía del portal</span><span>7</span></div>
+  <div class="ftr"><span>medassure beauty · Guía del portal · Datos de ejemplo ficticios</span><span>7</span></div>
 </section>
 
 <!-- ============ 8. CONTACTO ============ -->
@@ -551,7 +591,7 @@ function place(){
     var shot=el.closest('.shot'); var t=shot.querySelector(el.dataset.t);
     var sr=shot.getBoundingClientRect(), r=t.getBoundingClientRect();
     var x=r.left-sr.left, y=r.top-sr.top;
-    if(el.classList.contains('ring')){ var p=10; el.style.left=(x-p)+'px'; el.style.top=(y-p)+'px'; el.style.width=(r.width+2*p)+'px'; el.style.height=(r.height+2*p)+'px'; }
+    if(el.classList.contains('ring')){ var p=+(el.dataset.pad||10); el.style.left=(x-p)+'px'; el.style.top=(y-p)+'px'; el.style.width=(r.width+2*p)+'px'; el.style.height=(r.height+2*p)+'px'; }
     else { var p=el.dataset.p||'tl';
       if(p==='tl'){ el.style.left=(x-10-27)+'px'; el.style.top=(y-10-27)+'px'; }
       else if(p==='tr'){ el.style.left=(x+r.width+10-27)+'px'; el.style.top=(y-10-27)+'px'; }
