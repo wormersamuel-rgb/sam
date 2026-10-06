@@ -233,8 +233,9 @@
   .inv2 .bank { display: inline-block; margin-top: 4px; background: #f3f5f7; border-radius: 6px; padding: 5px 12px; font-weight: 700; }
   .inv2 .legal2 { position: absolute; left: 40px; right: 40px; bottom: 14px; border-top: 1px solid #333; padding-top: 7px; font-size: 12.5px; color: #444; display: flex; flex-direction: column; gap: 2px; }
   .lst { font-size: 21px; }
-  .lst thead th { font-size: 18px; padding: 16px 14px; }
-  .lst td { padding: 16px 14px; }
+  .lst thead th { font-size: 17px; padding: 16px 12px; white-space: nowrap; }
+  .lst td { padding: 16px 12px; }
+  .lst tbody td:first-child { white-space: nowrap; }
   .lst-notes { display: flex; gap: 40px; margin-top: 30px; align-items: flex-start; }
   .lst-notes .co { flex: 1.1; }
   .lst-notes .note { flex: 1; margin-top: 0; }
@@ -482,7 +483,7 @@
     <div class="steps" style="width:540px">
       <div class="callouts">
         <div class="co"><div class="num acc">1</div><p>Al mes siguiente recibe la <b>factura</b> de todos los seguros del mes.</p></div>
-        <div class="co"><div class="num acc">2</div><p><b>Importe total</b> a pagar.<span>Base imponible + 0,15 % de impuesto sobre primas.</span></p></div>
+        <div class="co"><div class="num acc">2</div><p><b>Importe total</b> a pagar.<span>Base imponible + 0,15 % de recargo del Consorcio de Compensación de Seguros.</span></p></div>
         <div class="co"><div class="num acc">3</div><p>Pago por <b>transferencia</b> o por <b>domiciliación bancaria</b>.</p></div>
       </div>
     </div>
@@ -511,7 +512,7 @@
               <thead><tr><th style="width:56px">Pos.</th><th>Concepto</th><th class="n">Importe</th></tr></thead>
               <tbody>
                 <tr><td>1</td><td>medassure beauty – facturación 04/2026 (base imponible)</td><td class="n">357,46 €</td></tr>
-                <tr><td>2</td><td>Impuesto sobre primas de seguro (0,15 %)</td><td class="n">0,54 €</td></tr>
+                <tr><td>2</td><td>Recargo Consorcio de Compensación de Seguros – CCS (0,15 %)</td><td class="n">0,54 €</td></tr>
                 <tr class="t" id="totrow"><td colspan="2">Importe total</td><td class="n">358,00 €</td></tr>
               </tbody>
             </table>
@@ -542,7 +543,7 @@
   <div class="body" style="flex-direction:column; gap:0">
     <div class="lst-head"><span><b>medassure beauty · CLÍNICA EJEMPLO SOL Y LUNA · 12345</b></span><span><b>04/2026</b> · <span style="color:var(--accent); font-weight:700">EJEMPLO</span></span></div>
     <table class="lst">
-      <thead><tr><th>Apellidos</th><th>Nombre</th><th>Fecha de la OP</th><th>Tipo de operación 1</th><th>Tipo de operación 2</th><th>Tipo de operación 3</th><th>Duración</th><th class="n">Prima total</th><th class="n">Impuesto</th><th class="n">Prima neta</th></tr></thead>
+      <thead><tr><th>Apellidos</th><th>Nombre</th><th>Fecha de la OP</th><th>Tipo de operación 1</th><th>Tipo de operación 2</th><th>Tipo de operación 3</th><th>Duración</th><th class="n">Prima total</th><th class="n">Recargo CCS</th><th class="n">Prima neta</th></tr></thead>
       <tbody>
         <tr><td>EJEMPLO EJEMPLAR</td><td>ANA</td><td>17.04.2026</td><td>Rinoplastia</td><td>Aumento de mamas con implantes</td><td></td><td>1</td><td class="n">259,00</td><td class="n">0,39</td><td class="n">258,61</td></tr>
         <tr><td>PRUEBA PRUEBAS</td><td>LUIS</td><td>24.04.2026</td><td>Blefaroplastia</td><td></td><td></td><td>2</td><td class="n">99,00</td><td class="n">0,15</td><td class="n">98,85</td></tr>
@@ -550,7 +551,7 @@
       <tfoot><tr><td colspan="7">Total</td><td class="n" id="lsttot">358,00</td><td class="n">0,54</td><td class="n">357,46</td></tr></tfoot>
     </table>
     <div class="lst-notes">
-      <div class="co"><div class="num">€</div><p>La suma de <b>«Prima total»</b> es el <b>importe total</b> de la factura.<span>Prima neta + impuesto sobre primas (0,15 %) = prima total. Duración en años.</span></p></div>
+      <div class="co"><div class="num">€</div><p>La suma de <b>«Prima total»</b> es el <b>importe total</b> de la factura.<span>Prima neta + recargo del Consorcio (CCS, 0,15 %) = prima total. Duración en años.</span></p></div>
       <div class="note">Revise la relación: si falta algún paciente o hay un dato incorrecto, avísenos antes de pagar y lo corregimos.</div>
     </div>
   </div>
