@@ -111,6 +111,37 @@ for page in w.pages:
         if an.get('/T') == 'iban':
             an[NameObject('/AA')] = DictionaryObject({NameObject('/K'): DictionaryObject({NameObject('/S'): NameObject('/JavaScript'),
                 NameObject('/JS'): TextStringObject('if (!event.willCommit) event.change = event.change.replace(/[^0-9]/g, "");')})})
+# "Borrar todo" push button on every page: ResetForm action, shown on screen but not printed
+from pypdf.generic import ArrayObject, FloatObject, NumberObject, StreamObject
+def reset_button(page, rect, idx):
+    x0, y0, x1, y1 = rect; bw, bh = x1 - x0, y1 - y0
+    label = 'Borrar todo'
+    tw = len(label) * 8.5 * 0.56
+    ap = StreamObject()
+    ap.set_data((f"q 0.80 0.22 0.18 rg 0 0 {bw:.2f} {bh:.2f} re f Q "
+                 f"BT /HeBo 8.5 Tf 1 1 1 rg {(bw - tw) / 2:.2f} {(bh - 6) / 2:.2f} Td (Borrar todo) Tj ET").encode())
+    ap.update({NameObject('/Type'): NameObject('/XObject'), NameObject('/Subtype'): NameObject('/Form'),
+               NameObject('/BBox'): ArrayObject([FloatObject(0), FloatObject(0), FloatObject(bw), FloatObject(bh)]),
+               NameObject('/Resources'): DictionaryObject({NameObject('/Font'): DictionaryObject({NameObject('/HeBo'): DictionaryObject({
+                   NameObject('/Type'): NameObject('/Font'), NameObject('/Subtype'): NameObject('/Type1'),
+                   NameObject('/BaseFont'): NameObject('/Helvetica-Bold'), NameObject('/Encoding'): NameObject('/WinAnsiEncoding')})})})})
+    apref = w._add_object(ap)
+    btn = DictionaryObject({
+        NameObject('/Type'): NameObject('/Annot'), NameObject('/Subtype'): NameObject('/Widget'),
+        NameObject('/FT'): NameObject('/Btn'), NameObject('/Ff'): NumberObject(1 << 16),
+        NameObject('/T'): TextStringObject(f'borrar_todo_{idx}'), NameObject('/TU'): TextStringObject('Borrar todos los datos del formulario'),
+        NameObject('/Rect'): ArrayObject([FloatObject(v) for v in rect]), NameObject('/F'): NumberObject(0),
+        NameObject('/MK'): DictionaryObject({NameObject('/BG'): ArrayObject([FloatObject(0.80), FloatObject(0.22), FloatObject(0.18)]),
+                                             NameObject('/CA'): TextStringObject(label)}),
+        NameObject('/DA'): TextStringObject('/Helv 8.5 Tf 1 1 1 rg'),
+        NameObject('/AP'): DictionaryObject({NameObject('/N'): apref}),
+        NameObject('/A'): DictionaryObject({NameObject('/S'): NameObject('/ResetForm')}),
+        NameObject('/P'): page.indirect_reference})
+    ref = w._add_object(btn)
+    page[NameObject('/Annots')].append(ref)
+    w._root_object['/AcroForm']['/Fields'].append(ref)
+reset_button(w.pages[0], (480.0, H1 - 824.0, 560.0, H1 - 808.0), 1)
+reset_button(w.pages[1], (480.0, H2 - 834.0, 560.0, H2 - 818.0), 2)
 w.add_metadata({'/Title': 'medassure beauty – Información económica y solicitud', '/Author': 'IberAssekuranz Brokers'})
 with open(out, 'wb') as f: w.write(f)
 r = PdfReader(out); print('fields:', len(r.get_fields()))
