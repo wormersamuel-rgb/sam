@@ -4,7 +4,33 @@
 
 ---
 
-## Texto del post (listo para pegar)
+## Texto del post: versión corta (recomendada con el carrusel)
+
+Una cirugía puede salir perfecta… y aun así complicarse.
+
+Y cuando eso pasa, casi nadie sabe quién paga.
+
+Un seroma. Una infección. Una contractura capsular.
+Nadie se ha equivocado, así que la RC profesional no entra: cubre el error, no la complicación fortuita.
+
+¿Resultado? Paga el paciente, la clínica reinterviene «por cortesía» o la Seguridad Social puede denegar la atención.
+
+Ese hueco es el que cubre medassure beauty. No sustituye a la RC: la completa.
+
+🛡️ La RC protege al profesional frente al error.
+🛡️ medassure protege al paciente y a la clínica frente al riesgo.
+
+Por eso cada vez más clínicas lo incorporan como estándar, igual que el consentimiento informado.
+
+Os lo explico en 9 diapositivas 👇
+
+¿Cómo gestionáis hoy una complicación en la que nadie tuvo la culpa?
+
+#CirugíaEstética #CirugíaPlástica #SeguridadDelPaciente
+
+---
+
+## Texto del post: versión larga (si publicas sin carrusel)
 
 Una cirugía puede salir perfecta… y aun así complicarse.
 
