@@ -1,0 +1,447 @@
+{
+ "fuente": "https://medassurance.de/die/jhc/medassure/beauty/nxt/settings y https://medassurance.de/die/jhc/medassure/beauty/nxt/calculate (producto jhc-medassure-beauty-es)",
+ "fecha_extraccion": "2026-10-06",
+ "duraciones_anos": [
+  1,
+  2,
+  5
+ ],
+ "max_tratamientos": {
+  "basic": 3,
+  "premium": 4
+ },
+ "precios": {
+  "A": {
+   "basic": [
+    69.0,
+    99.0,
+    129.0
+   ],
+   "premium": [
+    99.0,
+    129.0,
+    149.0
+   ]
+  },
+  "B": {
+   "basic": [
+    99.0,
+    129.0,
+    159.0
+   ],
+   "premium": [
+    149.0,
+    179.0,
+    199.0
+   ]
+  },
+  "C": {
+   "basic": [
+    169.0,
+    219.0,
+    269.0
+   ],
+   "premium": [
+    249.0,
+    299.0,
+    329.0
+   ]
+  },
+  "D": {
+   "basic": [
+    189.0,
+    239.0,
+    289.0
+   ],
+   "premium": [
+    279.0,
+    349.0,
+    399.0
+   ]
+  },
+  "E": {
+   "basic": [
+    289.0,
+    429.0,
+    599.0
+   ],
+   "premium": [
+    429.0,
+    599.0,
+    799.0
+   ]
+  },
+  "F": {
+   "basic": [
+    159.0,
+    189.0,
+    219.0
+   ],
+   "premium": [
+    209.0,
+    239.0,
+    259.0
+   ]
+  }
+ },
+ "recargo_por_n_tratamientos": {
+  "2": 50.0,
+  "3": 75.0,
+  "4": 100.0
+ },
+ "regla": "prima = precio de la categoría más cara (según tarifa y duración) + recargo por número de tratamientos",
+ "impuesto_seguro": 0.15,
+ "edad": {
+  "min": 18,
+  "max": 84
+ },
+ "paises_tratamiento": [
+  "de",
+  "es",
+  "fr",
+  "it",
+  "at"
+ ],
+ "tratamientos": [
+  {
+   "es": "Blefaroplastia (cirugía de párpados)",
+   "de": "Augenlidstraffung",
+   "categoria": "A",
+   "zona": "head",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Corrección de orejas prominentes",
+   "de": "Ohren-OP (Otoplastik)",
+   "categoria": "A",
+   "zona": "head",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Liposucción (1 intervención durante el periodo de cobertura)",
+   "de": "Fettabsaugung (1 Operation in der Laufzeit)",
+   "categoria": "A",
+   "zona": "body",
+   "excluye": [
+    "Liposucción (hasta 3 intervenciones durante el periodo de cobertura)",
+    "Lipoaspiración (1 intervención, incluyendo lifting con láser o radiofrecuencia)",
+    "Liposucción (3 intervenciones, incluyendo lifting con láser o radiofrecuencia)"
+   ],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Trasplante capilar",
+   "de": "Haartransplantation",
+   "categoria": "A",
+   "zona": "head",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Aspiración de glándulas sudoríparas",
+   "de": "Schweißdrüsenabsaugung",
+   "categoria": "B",
+   "zona": "body",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Corrección de cicatrices",
+   "de": "Narbenkorrektur",
+   "categoria": "B",
+   "zona": "body",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Lifting de cuello",
+   "de": "Halsstraffung (Necklift)",
+   "categoria": "B",
+   "zona": "head",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Lifting facial (frente, cejas, mejillas, labios, línea del mentón)",
+   "de": "Facelift (Stirn, Brauen, Wangen, Kinnlinie)",
+   "categoria": "B",
+   "zona": "head",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Lifting facial con grasa autóloga",
+   "de": "Facelift mit Eigenfett",
+   "categoria": "B",
+   "zona": "head",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Lipoaspiración (1 intervención, incluyendo lifting con láser o radiofrecuencia)",
+   "de": "Fettabsaugung (1 Operation inkl. Laser-/Radiofrequenzstraffung)",
+   "categoria": "B",
+   "zona": "body",
+   "excluye": [
+    "Liposucción (hasta 3 intervenciones durante el periodo de cobertura)",
+    "Liposucción (1 intervención durante el periodo de cobertura)",
+    "Liposucción (3 intervenciones, incluyendo lifting con láser o radiofrecuencia)"
+   ],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Liposucción (hasta 3 intervenciones durante el periodo de cobertura)",
+   "de": "Fettabsaugung (3 Operationen in der Laufzeit)",
+   "categoria": "B",
+   "zona": "body",
+   "excluye": [
+    "Liposucción (1 intervención durante el periodo de cobertura)",
+    "Lipoaspiración (1 intervención, incluyendo lifting con láser o radiofrecuencia)",
+    "Liposucción (3 intervenciones, incluyendo lifting con láser o radiofrecuencia)"
+   ],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Reducción de los labios vaginales",
+   "de": "Schamlippenverkleinerung",
+   "categoria": "B",
+   "zona": "intimate",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Abdominoplastia",
+   "de": "Bauchstraffung",
+   "categoria": "C",
+   "zona": "body",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Balón gástrico",
+   "de": "Magenballon",
+   "categoria": "C",
+   "zona": "stomach",
+   "excluye": [
+    "Blefaroplastia (cirugía de párpados)",
+    "Liposucción (1 intervención durante el periodo de cobertura)",
+    "Trasplante capilar",
+    "Corrección de orejas prominentes",
+    "Lifting facial (frente, cejas, mejillas, labios, línea del mentón)",
+    "Lifting facial con grasa autóloga",
+    "Lipoaspiración (1 intervención, incluyendo lifting con láser o radiofrecuencia)",
+    "Liposucción (hasta 3 intervenciones durante el periodo de cobertura)",
+    "Lifting de cuello",
+    "Corrección de cicatrices",
+    "Reducción de los labios vaginales",
+    "Aspiración de glándulas sudoríparas",
+    "Abdominoplastia",
+    "Cirugía de glúteos: lifting",
+    "Cirugía de glúteos: aumento con grasa autóloga",
+    "Cirugía íntima / Cirugía estética genital",
+    "Cirugía de nariz / Rinoplastia",
+    "Lifting de brazos",
+    "Lifting de muslos",
+    "Cirugía de pantorrillas: reducción",
+    "Bodylift 360° (abdomen, flancos/cintura, espalda)",
+    "Cirugía mamaria: ginecomastia",
+    "Cirugía mamaria: extracción de implantes",
+    "Cirugía mamaria: mastectomía",
+    "Cirugía de mamas con grasa autóloga",
+    "Cirugía mamaria: reducción / lifting",
+    "Cirugía mamaria: sustitución de implantes",
+    "Cirugía mamaria con implantes",
+    "Cirugía de glúteos: aumento con implantes",
+    "Cirugía de mentón con implante",
+    "Reducción gástrica (Overstitch, POSE, Endomina)",
+    "Cirugía de pantorrillas: aumento con implantes",
+    "Liposucción (3 intervenciones, incluyendo lifting con láser o radiofrecuencia)"
+   ],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Cirugía de glúteos: aumento con grasa autóloga",
+   "de": "Gesäß-OP Vergrößerung mit Eigenfett",
+   "categoria": "C",
+   "zona": "intimate",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Cirugía de glúteos: lifting",
+   "de": "Gesäß-OP Straffung",
+   "categoria": "C",
+   "zona": "intimate",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Cirugía de nariz / Rinoplastia",
+   "de": "Nasen-OP/Nasenkorrektur",
+   "categoria": "C",
+   "zona": "head",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Cirugía de pantorrillas: reducción",
+   "de": "Waden-OP Verkleinerung",
+   "categoria": "C",
+   "zona": "body",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Cirugía íntima / Cirugía estética genital",
+   "de": "Intimchirurgie / Genitalkosmetik",
+   "categoria": "C",
+   "zona": "intimate",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Lifting de brazos",
+   "de": "Oberarmstraffung",
+   "categoria": "C",
+   "zona": "body",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Lifting de muslos",
+   "de": "Oberschenkelstraffung",
+   "categoria": "C",
+   "zona": "body",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Bodylift 360° (abdomen, flancos/cintura, espalda)",
+   "de": "Bodylift 360° (Bauch, Flanken/Taile, Rücken)",
+   "categoria": "D",
+   "zona": "body",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Cirugía de mamas con grasa autóloga",
+   "de": "Brust-OP Vergrößerung mit Eigenfett",
+   "categoria": "D",
+   "zona": "breast",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Cirugía mamaria: extracción de implantes",
+   "de": "Brust-OP Implantatentfernung",
+   "categoria": "D",
+   "zona": "breast",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Cirugía mamaria: ginecomastia",
+   "de": "Gynäkomastie",
+   "categoria": "D",
+   "zona": "breast",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Cirugía mamaria: mastectomía",
+   "de": "Brust-OP Mastektomie",
+   "categoria": "D",
+   "zona": "breast",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Cirugía mamaria: reducción / lifting",
+   "de": "Brust-OP Verkleinerung/Straffung",
+   "categoria": "D",
+   "zona": "breast",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Corrección de los pezones",
+   "de": "Brust-OP Brustwarzenkorrektur",
+   "categoria": "D",
+   "zona": "breast",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Cirugía de glúteos: aumento con implantes",
+   "de": "Gesäß-OP Vergrößerung mit Implantat",
+   "categoria": "E",
+   "zona": "intimate",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Cirugía de mentón con implante",
+   "de": "Kinn-OP mit Implantat",
+   "categoria": "E",
+   "zona": "head",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Cirugía de pantorrillas: aumento con implantes",
+   "de": "Waden-OP Vergrößerung mit Implantat",
+   "categoria": "E",
+   "zona": "body",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Cirugía mamaria con implantes",
+   "de": "Brust-OP mit Implantat (Vergrößerung/ Verkleinerung)",
+   "categoria": "E",
+   "zona": "breast",
+   "excluye": [],
+   "preguntas_riesgo": {
+    "capsular": {
+     "excluye_si_si": true,
+     "texto": "Me han diagnosticado una contractura capsular."
+    }
+   }
+  },
+  {
+   "es": "Cirugía mamaria: sustitución de implantes",
+   "de": "Brust-OP Implantatwechsel",
+   "categoria": "E",
+   "zona": "body",
+   "excluye": [],
+   "preguntas_riesgo": {
+    "capsular": {
+     "excluye_si_si": true,
+     "texto": "Me han diagnosticado una contractura capsular."
+    }
+   }
+  },
+  {
+   "es": "Reducción gástrica (Overstitch, POSE, Endomina)",
+   "de": "Magenverkleinerung (Overstich,POSE,Endomina)",
+   "categoria": "E",
+   "zona": "stomach",
+   "excluye": [],
+   "preguntas_riesgo": {}
+  },
+  {
+   "es": "Liposucción (3 intervenciones, incluyendo lifting con láser o radiofrecuencia)",
+   "de": "Fettabsaugung (3 Operationen inkl. Laser-/Radiofrequenzstraffung)",
+   "categoria": "F",
+   "zona": "body",
+   "excluye": [
+    "Liposucción (1 intervención durante el periodo de cobertura)",
+    "Liposucción (hasta 3 intervenciones durante el periodo de cobertura)",
+    "Lipoaspiración (1 intervención, incluyendo lifting con láser o radiofrecuencia)"
+   ],
+   "preguntas_riesgo": {}
+  }
+ ]
+}

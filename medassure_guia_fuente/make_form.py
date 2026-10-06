@@ -1,4 +1,4 @@
-import sys, json
+import sys
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 from reportlab.pdfbase.pdfmetrics import stringWidth
@@ -14,37 +14,7 @@ T = colors.Color(1, 1, 1, alpha=0)
 INK = colors.Color(0.05, 0.15, 0.35)
 BLUE = colors.Color(0.16862746, 0.56078436, 0.84705886)
 
-# ---- tariff data (same as the printed table / customer letter) ----
-PRICES = {  # category -> tariff -> [1, 2, 5 years]
-    'a': {'B': [69, 99, 129], 'P': [99, 129, 149]},
-    'b': {'B': [99, 129, 159], 'P': [149, 179, 199]},
-    'c': {'B': [169, 219, 269], 'P': [249, 299, 329]},
-    'd': {'B': [189, 239, 289], 'P': [279, 349, 399]},
-    'e': {'B': [289, 429, 599], 'P': [429, 599, 799]},
-}
-SURCHARGE = [0, 0, 50, 75, 100]          # by number of treatments
-TENSADO = {'a': 30, 'b': 60}             # skin tightening with liposuction
-TREATMENTS = [  # (option shown in the dropdown, category; 'L' = liposuction, category from section "EN CASO DE LIPOSUCCIÓN")
-    ('Párpados (blefaroplastia) · a', 'a'),
-    ('Cabello (injerto capilar) · a', 'a'),
-    ('Liposucción · a/b', 'L'),
-    ('Lifting facial / cervical · b', 'b'),
-    ('Labioplastia · b', 'b'),
-    ('Lifting de brazos · c', 'c'),
-    ('Lifting de abdomen (abdominoplastia) · c', 'c'),
-    ('Lifting de muslos · c', 'c'),
-    ('Nariz (rinoplastia) · c', 'c'),
-    ('Balón gástrico · c', 'c'),
-    ('Otro tratamiento de categoría c', 'c'),
-    ('Body lift · d', 'd'),
-    ('Mastopexia · d', 'd'),
-    ('Mastectomía · d', 'd'),
-    ('Reducción mamaria · d', 'd'),
-    ('Retirada de implantes · d', 'd'),
-    ('Aumento mamario con implante · e', 'e'),
-    ('Cambio de implante · e', 'e'),
-    ('Reducción gástrica · e', 'e'),
-]
+from tarifa_form import TREATMENTS, DOC_JS  # tariff data from the medassurance.de calculator
 
 ov = 'overlay.pdf'
 c = canvas.Canvas(ov, pagesize=(W1, H1))
@@ -186,95 +156,7 @@ for page, ref, a, fld in widgets():
         a[NameObject('/AA')] = DictionaryObject({NameObject('/C'): js_action('event.value = maCalc();')})
         w._root_object['/AcroForm'][NameObject('/CO')] = ArrayObject([ref])
 
-# ---- document-level JavaScript (Acrobat / Acrobat Reader) ----
-DOC_JS = r'''
-var maDoc = this;
-var MA_PRICES = %(prices)s;
-var MA_SUR = %(sur)s;
-var MA_TENS = %(tens)s;
-var MA_TRAT = %(trat)s;
-function maF(n) { return maDoc.getField(n); }
-function maVal(n) { var f = maF(n); return f ? String(f.valueAsString).replace(/^\s+|\s+$/g, "") : ""; }
-function maOn(n) { var f = maF(n); return f ? f.value != "Off" : false; }
-function maAny(names) { for (var i = 0; i < names.length; i++) if (maOn(names[i])) return true; return false; }
-function maLock(n, lock) {
-  var f = maF(n); if (!f) return;
-  if (f.readonly != lock) f.readonly = lock;
-  if (lock) { var empty = (f.type == "checkbox") ? "Off" : ""; if (String(f.value).replace(/\s+/g, "") != String(empty)) f.value = empty; }
-}
-function maHasLipo() { for (var i = 1; i <= 4; i++) if (MA_TRAT[maVal("tratamiento_" + i)] == "L") return true; return false; }
-function maRules() {
-  // Basica admits max. 3 treatments
-  maLock("tratamiento_4", maOn("tarifa_basica"));
-  // liposuction options only when a liposuction treatment is chosen
-  var lipo = maHasLipo();
-  maLock("liposuccion_1_operacion", !lipo); maLock("liposuccion_hasta_3", !lipo); maLock("tensado_cutaneo", !lipo);
-}
-function maCalc() {
-  maRules();
-  var tar = maOn("tarifa_basica") ? "B" : (maOn("tarifa_premium") ? "P" : "");
-  var d = maOn("duracion_1_ano") ? 0 : (maOn("duracion_2_anos") ? 1 : (maOn("duracion_5_anos") ? 2 : -1));
-  var n = 0, best = 0, unknown = false, lipoCat = "";
-  for (var i = 1; i <= 4; i++) {
-    var v = maVal("tratamiento_" + i);
-    if (v == "") continue;
-    n++;
-    var cat = MA_TRAT[v];
-    if (cat == "L") {
-      cat = maOn("liposuccion_hasta_3") ? "b" : (maOn("liposuccion_1_operacion") ? "a" : "");
-      if (cat == "") return "marque n.º de operaciones";
-      lipoCat = cat;
-    }
-    if (!cat) { unknown = true; continue; }
-    if (tar && d >= 0) best = Math.max(best, MA_PRICES[cat][tar][d]);
-  }
-  if (n == 0) return "elija tratamiento";
-  if (!tar) return "elija tarifa";
-  if (d < 0) return "elija duración";
-  if (unknown) return "consúltenos";
-  var total = best + MA_SUR[Math.min(n, 4)];
-  if (lipoCat && maOn("tensado_cutaneo")) total += MA_TENS[lipoCat];
-  return String(total.toFixed(2)).replace(".", ",") + " €";
-}
-var MA_REQ = [
-  ["apellidos_nombre", "Apellidos, nombre"], ["fecha_nacimiento", "Fecha de nacimiento"],
-  ["calle_numero", "Calle, número"], ["cp_localidad", "Código postal y localidad"],
-  ["telefono", "Teléfono"], ["email", "E-mail"], ["cirujano_clinica", "Cirujano/a y clínica"],
-  ["fecha_operacion", "Fecha de la operación"], ["tratamiento_1", "Tipo de tratamiento 1"],
-  ["titular_cuenta", "Titular de la cuenta"], ["direccion_titular", "Dirección del titular de la cuenta"],
-  ["p2_lugar_fecha", "Lugar y fecha (página 2)"], ["p1_lugar_fecha", "Lugar y fecha (página 1)"]
-];
-function maEnviar() {
-  if (maOn("decision_renunciar")) {
-    app.alert("Ha marcado que renuncia al seguro de complicaciones.\n\nNo es necesario enviar la solicitud: basta con firmar la primera página y entregarla en la clínica.", 3);
-    return;
-  }
-  var miss = [];
-  if (!maOn("decision_contratar")) miss.push("Su decisión (página 1)");
-  for (var i = 0; i < MA_REQ.length; i++) if (maVal(MA_REQ[i][0]) == "") miss.push(MA_REQ[i][1]);
-  if (!maAny(["grasa_autologa_si", "grasa_autologa_no"])) miss.push("¿Tratamiento con grasa autóloga?");
-  if (!maAny(["contractura_si", "contractura_no"])) miss.push("¿Contractura capsular ya diagnosticada?");
-  if (maHasLipo() && !maAny(["liposuccion_1_operacion", "liposuccion_hasta_3"])) miss.push("Liposucción: n.º de operaciones");
-  if (!maAny(["tarifa_basica", "tarifa_premium"])) miss.push("Selección de tarifa");
-  if (!maAny(["duracion_1_ano", "duracion_2_anos", "duracion_5_anos"])) miss.push("Duración (1, 2 o 5 años)");
-  var iban = maVal("iban").replace(/[^0-9]/g, "");
-  if (iban.length != 22) miss.push("IBAN (faltan dígitos: hay " + iban.length + " de 22)");
-  var em = maVal("email");
-  if (em != "" && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)) miss.push("E-mail (no parece válido)");
-  if (miss.length) {
-    app.alert("Antes de enviar, complete estos datos:\n\n• " + miss.join("\n• "), 1);
-    return;
-  }
-  var msg = "Todo está completo.\n\nPrima total: " + maCalc() +
-            "\n\nRecuerde firmar en las dos páginas.\n\n¿Enviar ahora la solicitud a info@medassure.es?";
-  if (app.alert(msg, 2, 2) == 4) {
-    maDoc.mailDoc({ bUI: true, cTo: "info@medassure.es",
-      cSubject: "Solicitud medassure beauty - " + maVal("apellidos_nombre"),
-      cMsg: "Adjunto la solicitud del seguro de complicaciones medassure beauty.\n\nFecha de la operación: " + maVal("fecha_operacion") });
-  }
-}
-''' % {'prices': json.dumps(PRICES), 'sur': json.dumps(SURCHARGE), 'tens': json.dumps(TENSADO),
-       'trat': json.dumps({t: cat for t, cat in TREATMENTS}, ensure_ascii=False)}
+# ---- document-level JavaScript (Acrobat / Acrobat Reader): see tarifa_form.py ----
 w.add_js(DOC_JS)
 
 
