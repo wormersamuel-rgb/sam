@@ -451,7 +451,6 @@
                   <div class="slider"><div class="fill"></div><div class="knob"></div></div>
                   <div class="ticks"><span>1 año</span><b>2 años</b><span>5 años</span></div>
                   <div class="toggle"><b>Básica</b><span class="sw"></span><span>Premium</span></div>
-                  <div class="chk"><i></i>Añadir también beHappy</div>
                   <div class="sum">
                     <div class="tot"><span>Importe total</span><span style="font-weight:500; font-size:16px; color:var(--muted)">se calcula automáticamente</span></div>
                   </div>
@@ -482,9 +481,9 @@
   <div class="body" style="gap:56px">
     <div class="steps" style="width:540px">
       <div class="callouts">
-        <div class="co"><div class="num acc">1</div><p>Al mes siguiente recibe la <b>factura</b> de todos los seguros del mes.<span>Rechnung Nr. = n.º de factura · Kunden Nr. = n.º de cliente · Datum = fecha.</span></p></div>
-        <div class="co"><div class="num acc">2</div><p><b>Importe total</b> a pagar.<span>Prima neta + 0,15 % de impuesto sobre primas.</span></p></div>
-        <div class="co"><div class="num acc">3</div><p>Pago <b>inmediato por transferencia</b>, sin deducciones.<span>Únicamente a la cuenta de Commerzbank indicada.</span></p></div>
+        <div class="co"><div class="num acc">1</div><p>Al mes siguiente recibe la <b>factura</b> de todos los seguros del mes.</p></div>
+        <div class="co"><div class="num acc">2</div><p><b>Importe total</b> a pagar.<span>Base imponible + 0,15 % de impuesto sobre primas.</span></p></div>
+        <div class="co"><div class="num acc">3</div><p>Pago por <b>transferencia</b> o por <b>domiciliación bancaria</b>.</p></div>
       </div>
     </div>
     <div class="shot">
@@ -495,30 +494,30 @@
             <div class="top2">
               <div class="l">
                 <img src="assets/logo_medassure.png" alt="" class="lg">
-                <div class="sender">JHC Service GmbH TH, Konrad-Adenauer-Ufer 39, 50668 Köln</div>
-                <div class="rcpt">Clínica Ejemplo Sol y Luna S.L.<br>Calle Inventada 0<br>08000 Barcelona<br>Spanien</div>
+                <div class="sender">JHC Service GmbH · Konrad-Adenauer-Ufer 39 · 50668 Colonia (Alemania)</div>
+                <div class="rcpt">Clínica Ejemplo Sol y Luna S.L.<br>Calle Inventada 0<br>08000 Barcelona<br>España</div>
               </div>
               <div class="r">
                 <img src="assets/logo_jhc.png" alt="" class="lg2">
-                <div>Konrad-Adenauer-Ufer 39 · 50668 Köln<br>Telefon +49 (0)221 39099 55 66<br>Telefax +49 (0)221 39099 55 89<br>www.jhc-service.de</div>
+                <div>Konrad-Adenauer-Ufer 39 · 50668 Colonia<br>Teléfono +49 (0)221 39099 55 66<br>Fax +49 (0)221 39099 55 89<br>www.jhc-service.de</div>
               </div>
             </div>
             <div class="meta2" id="invmeta">
-              <div><div class="rn">Rechnung Nr. 999999</div><div class="fa">Factura</div></div>
-              <table class="kv"><tr><td>Kunden Nr.:</td><td>12345</td></tr><tr><td>Datum:</td><td>11.05.2026</td></tr></table>
+              <div><div class="rn">Factura n.º 999999</div></div>
+              <table class="kv"><tr><td>N.º de cliente:</td><td>12345</td></tr><tr><td>Fecha:</td><td>11/05/2026</td></tr></table>
             </div>
-            <div class="ins">medassure Billing por cuenta y en nombre de Nürnberger Krankenversicherung AG, Ostendstraße 100, 90334 Nuremberg, Alemania</div>
+            <div class="ins">Facturación de medassure por cuenta y en nombre de Nürnberger Krankenversicherung AG, Ostendstraße 100, 90334 Núremberg (Alemania)</div>
             <table class="pos">
-              <thead><tr><th style="width:56px">Pos</th><th>Texto</th><th class="n">Precio total</th></tr></thead>
+              <thead><tr><th style="width:56px">Pos.</th><th>Concepto</th><th class="n">Importe</th></tr></thead>
               <tbody>
-                <tr><td>1</td><td>medassure beauty Facturación 04/2026 – imponible</td><td class="n">357,46 EUR</td></tr>
-                <tr><td>2</td><td>Impuesto de seguros del 0,15%</td><td class="n">0,54 EUR</td></tr>
-                <tr class="t" id="totrow"><td colspan="2">Importe total</td><td class="n">358,00 EUR</td></tr>
+                <tr><td>1</td><td>medassure beauty – facturación 04/2026 (base imponible)</td><td class="n">357,46 €</td></tr>
+                <tr><td>2</td><td>Impuesto sobre primas de seguro (0,15 %)</td><td class="n">0,54 €</td></tr>
+                <tr class="t" id="totrow"><td colspan="2">Importe total</td><td class="n">358,00 €</td></tr>
               </tbody>
             </table>
-            <div class="pay2" id="paybox">La factura es pagadera inmediatamente sin deducción. Por favor, transfiera el importe únicamente a nuestra cuenta en<br>
+            <div class="pay2" id="paybox">Forma de pago: transferencia a la siguiente cuenta o domiciliación bancaria.<br>
               <span class="bank">Commerzbank AG · IBAN: DE80 3704 0044 0506 3813 00 · BIC: COBADEFFXXX</span></div>
-            <div class="legal2"><span>Amtsgericht Köln, HRB 37364 · Geschäftsführer Dipl.-Kfm. Uwe Jahnke, Dipl.-Kfm. Christian Wilhelm Hoyer · Steuernummer 215/5823/1521</span><span>Zugelassener Versicherungsmakler gemäß § 34d Abs. 1 GewO · Reg.-Nr.: D-910V-NE1WI-82</span></div>
+            <div class="legal2"><span>Registro Mercantil de Colonia, HRB 37364 · Gerentes: Uwe Jahnke y Christian Wilhelm Hoyer · N.º fiscal 215/5823/1521</span><span>Corredor de seguros autorizado (§ 34d, apdo. 1 GewO) · N.º de registro D-910V-NE1WI-82</span></div>
           </div>
         </div>
       </div>
