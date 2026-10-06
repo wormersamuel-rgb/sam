@@ -139,7 +139,7 @@ for page, ref, a, fld in widgets():
     if fld.get('/FT') == '/Btn' and '/AP' in a:
         x0, y0, x1, y1 = [float(v) for v in a['/Rect']]
         sz = min(x1 - x0, y1 - y0); m = sz * 0.24; lw = max(1.3, sz * 0.13)
-        path = (f"q .05 .15 .35 RG {lw:.2f} w 1 J {m:.2f} {m:.2f} m {sz-m:.2f} {sz-m:.2f} l S "
+        path = (f"q .05 .15 .35 RG {lw:.2f} w 1 J {m:.2f} {m:.2f} m {sz-m:.2f} {sz-m:.2f} l "
                 f"{m:.2f} {sz-m:.2f} m {sz-m:.2f} {m:.2f} l S Q").encode()
         for st, ref2 in a['/AP']['/N'].items():
             if st != '/Off': ref2.get_object().set_data(path)

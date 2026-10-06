@@ -26,6 +26,16 @@ for page in w.pages:
             done += 1
 assert done == 4, done
 
+# tick marks: draw the X as one path (with two strokes some viewers drop the second line)
+for page in w.pages:
+    for ref in page.get('/Annots', []):
+        a = ref.get_object()
+        if a.get('/FT') == '/Btn' and '/AP' in a and '/Yes' in a['/AP']['/N']:
+            s = a['/AP']['/N']['/Yes'].get_object()
+            data = s.get_data()
+            if data.count(b' S ') == 2:
+                s.set_data(data.replace(b' l S ', b' l ', 1))
+
 names = w._root_object['/Names']['/JavaScript']['/Names']
 assert len(names) == 2, 'expected one document-level script'
 names[1].get_object()[NameObject('/JS')] = TextStringObject(DOC_JS)
