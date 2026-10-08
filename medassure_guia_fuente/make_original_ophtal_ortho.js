@@ -8,6 +8,9 @@
 //      node make_original_ophtal_ortho.js ophtal ../medassure_ophtal_Formulario_imprimir.pdf --imprimir
 // Precios y coberturas: folletos «Flyer - Medassure Ophtal» y «Flyer - Medassure Ortho» (originales/).
 const fs = require('fs');
+const path = require('path');
+// DM Sans (SIL OFL, assets/) is the typeface of the medassure logo, as in the dental and adipo forms and the flyers
+const font = w => fs.readFileSync(path.join(__dirname, 'assets', `dm-sans-latin-${w}-normal.woff2`)).toString('base64');
 const { chromium } = require('playwright');
 
 const IMPRESO = process.argv.includes('--imprimir');  // paper version: blank premium box, instructions for paper
@@ -40,7 +43,7 @@ const P = {
   ortho: {
     color: '#E67E22', dark: '#A0540D', tint: '#FDF1E6', tintBorder: '#F2C9A2',
     pie: 'Prótesis de rodilla y de cadera',
-    aviso: 'AVISO SOBRE LOS COSTES DERIVADOS DE COMPLICACIONES TRAS UNA PRÓTESIS DE RODILLA O DE CADERA',
+    aviso: 'AVISO SOBRE LOS COSTES DE COMPLICACIONES TRAS UNA PRÓTESIS DE RODILLA O DE CADERA',
     marco: `Cuando una prótesis de rodilla o de cadera se coloca en una clínica privada, <b>la intervención y sus
       posibles complicaciones las paga, con carácter general, el propio paciente</b>. Si surge una complicación grave
       (por ejemplo, una infección o una luxación de la prótesis), la sanidad pública atenderá al paciente, pero podrá
@@ -88,65 +91,68 @@ if (product === 'ophtal') {
 const html = `<!doctype html><html lang="es"><head><meta charset="utf-8"><style>
 @page { size: A4; margin: 0; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
+@font-face { font-family: 'DM Sans'; font-weight: 700; src: url(data:font/woff2;base64,${font(700)}) format('woff2'); }
+@font-face { font-family: 'DM Sans'; font-weight: 500; src: url(data:font/woff2;base64,${font(500)}) format('woff2'); }
 body { font-family: Arial, Helvetica, sans-serif; color: #1c2430; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-.page { width: 210mm; height: 297mm; padding: 13mm 14mm 0; position: relative; overflow: hidden; page-break-after: always; }
+.page { width: 210mm; height: 297mm; padding: 11mm 13mm 0; position: relative; overflow: hidden; page-break-after: always; }
 .c { color: ${P.color}; }
 .head { display: flex; justify-content: space-between; align-items: flex-start; }
-.logo .wm { font-weight: bold; color: ${P.color}; letter-spacing: -0.5px; }
-.logo .sub { display: flex; align-items: center; gap: 8px; color: #1c2430; }
-.logo .sub i { flex: 1; height: 1px; background: #9aa3ad; }
-.p1 .logo { width: 205px; } .p1 .logo .wm { font-size: 42px; line-height: 44px; } .p1 .logo .sub { font-size: 17px; }
-.p2 .logo { width: 120px; } .p2 .logo .wm { font-size: 24px; line-height: 26px; } .p2 .logo .sub { font-size: 11.5px; }
-.addr { text-align: right; font-size: 10.5px; line-height: 15px; }
-.p2 .addr { font-size: 9.5px; line-height: 14px; margin-top: 2px; }
-h1 { font-size: 21px; margin-top: 44px; }
-.kicker { font-size: 8px; letter-spacing: 2.4px; color: #6b7480; font-weight: bold; margin-top: 4px; }
+.logo { font-family: 'DM Sans', Arial, sans-serif; }
+.logo .wm { font-weight: 700; color: ${P.color}; letter-spacing: -0.4px; }
+.logo .sub { display: flex; align-items: center; gap: 12px; color: #13202f; font-weight: 500; }
+.logo .sub i { flex: 1; height: 1.3px; background: #c8cbcf; }
+.p1 .logo { width: 236px; } .p1 .logo .wm { font-size: 49px; line-height: 50px; } .p1 .logo .sub { font-size: 20px; margin-top: 3px; }
+.p2 .logo { width: 142px; } .p2 .logo .wm { font-size: 29.5px; line-height: 30px; } .p2 .logo .sub { font-size: 12px; margin-top: 1px; gap: 8px; }
+.addr { text-align: right; font-size: 11.5px; line-height: 16px; }
+.p2 .addr { font-size: 10.1px; line-height: 14.7px; margin-top: 4px; }
+h1 { font-size: 22.7px; margin-top: 40px; }
+.kicker { white-space: nowrap; font-size: 9px; letter-spacing: 2.6px; color: #6b7480; font-weight: bold; margin-top: 5px; }
 .sec { display: flex; align-items: center; gap: 9px; margin-top: 26px; }
-.num { width: 15px; height: 15px; border-radius: 50%; background: ${P.color}; color: #fff; font-size: 9px; font-weight: bold;
+.num { width: 16px; height: 16px; border-radius: 50%; background: ${P.color}; color: #fff; font-size: 9.5px; font-weight: bold;
        display: inline-flex; align-items: center; justify-content: center; }
-h2 { font-size: 14.5px; }
+h2 { font-size: 14.7px; }
 .note { font-size: 10.5px; color: #6b7480; margin-left: 4px; }
-.p1 .sec { margin-top: 30px; }
-.p1 p { font-size: 11.3px; line-height: 17.5px; text-align: justify; margin-top: 8px; }
+.p1 .sec { margin-top: 31px; }
+.p1 p { font-size: 12.8px; line-height: 19.3px; text-align: justify; margin-top: 9px; }
 .dec { display: flex; gap: 14px; align-items: flex-start; border: 1px solid ${P.tintBorder}; background: ${P.tint};
-       border-radius: 7px; padding: 14px 16px; margin-top: 16px; font-size: 11.3px; line-height: 14px; }
+       border-radius: 7px; padding: 15px 16px; margin-top: 17px; font-size: 12.8px; line-height: 14.7px; }
 .circ { display: inline-block; width: 18px; height: 18px; border: 1.4px solid #1c2430; border-radius: 50%; flex: none; background: #fff; }
 .circ.sm { width: 15px; height: 15px; vertical-align: -3px; margin-right: 5px; }
 .box { display: inline-block; width: 15px; height: 15px; border: 1.2px solid #1c2430; flex: none; background: #fff; vertical-align: -3px; }
-.confirm { font-weight: bold; font-size: 11.3px; margin-top: 34px; }
-.sigs { position: absolute; left: 14mm; right: 14mm; top: 1003px; display: flex; gap: 38px; }
-.sigs > div { flex: 1; border-top: 1px solid #1c2430; padding-top: 7px; font-size: 8px; letter-spacing: 2px; font-weight: bold; color: #4a5360; }
-.foot { position: absolute; left: 14mm; right: 14mm; top: 1078px; border-top: 1px solid #dde1e5; padding-top: 7px;
-        font-size: 8.5px; color: #6b7480; display: flex; align-items: center; }
+.confirm { font-weight: bold; font-size: 12.8px; margin-top: 40px; }
+.sigs { position: absolute; left: 13mm; right: 13mm; top: 1009px; display: flex; gap: 44px; }
+.sigs > div { flex: 1; border-top: 1px solid #1c2430; padding-top: 8px; font-size: 9px; letter-spacing: 2.4px; font-weight: bold; color: #4a5360; }
+.foot { position: absolute; left: 13mm; right: 13mm; top: 1076px; border-top: 1px solid #dde1e5; padding-top: 7px;
+        font-size: 9px; color: #6b7480; display: flex; align-items: center; }
 .foot .sq { width: 9px; height: 9px; background: #9aa3ad; margin-right: 8px; }
 .foot .btns { margin-left: auto; width: 296px; height: 21px; }
 /* página 2 */
 .info { display: flex; gap: 10px; align-items: flex-start; background: ${P.tint}; border: 1px solid ${P.tintBorder}; border-radius: 7px;
-        padding: 9px 12px; margin-top: 14px; font-size: 10.3px; line-height: 15px; }
+        padding: 8px 12px; margin-top: 12px; font-size: 10.7px; line-height: 18.7px; }
 .info .i { width: 13px; height: 13px; border-radius: 50%; background: ${P.color}; color: #fff; font-size: 9px; font-weight: bold;
-           display: inline-flex; align-items: center; justify-content: center; flex: none; margin-top: 1px; }
-.p2 .sec { margin-top: 12px; }
+           display: inline-flex; align-items: center; justify-content: center; flex: none; margin-top: 3px; }
+.p2 .sec { margin-top: 13px; } .p2 h2 { font-size: 14px; }
 .row { display: flex; gap: 42px; }
-.fld { flex: 1; margin-top: 9px; }
-.lab { font-size: 8px; letter-spacing: 1.9px; font-weight: bold; color: #4a5360; }
-.ul { height: 22px; border-bottom: 1px solid #1c2430; }
-.frame { border: 1px solid #c7ccd2; padding: 9px 13px 11px; margin-top: 10px; }
-.opts { display: flex; flex-wrap: wrap; gap: 8px 26px; margin-top: 8px; font-size: 11.3px; }
+.fld { flex: 1; margin-top: 6px; }
+.lab { font-size: 8.7px; letter-spacing: 1.45px; white-space: nowrap; font-weight: bold; color: #4a5360; }
+.ul { height: 19px; border-bottom: 1px solid #1c2430; }
+.frame { border: 1px solid #c7ccd2; padding: 10px 13px 12px; margin-top: 12px; }
+.opts { display: flex; flex-wrap: wrap; gap: 8px 26px; margin-top: 9px; font-size: 11.2px; }
 .opts label { display: inline-flex; align-items: center; gap: 7px; }
 .tars { display: flex; gap: 22px; margin-top: 10px; }
-.tar { flex: 1; border-radius: 7px; padding: 9px 13px 10px; font-size: 11.3px; line-height: 16px; }
-.tar.b { background: #f0f2f4; } .tar.p { background: ${P.tint}; border: 1px solid ${P.tintBorder}; }
-.tar .t { display: flex; align-items: center; gap: 9px; font-weight: bold; font-size: 14px; margin-bottom: 4px; }
-.tar.p .t .name { background: ${P.color}; color: #fff; border-radius: 12px; padding: 3px 11px; }
-.tar .pill { margin-left: auto; border: 1px solid ${P.dark}; color: ${P.dark}; border-radius: 9px; font-size: 8.5px; padding: 1px 8px; }
+.tar { flex: 1; border-radius: 7px; padding: 9px 13px 10px; font-size: 11.2px; line-height: 16px; }
+.tar.b { background: #f0f2f4; } .tar.p { background: #FDF3D3; border: 1px solid #F2D27A; }
+.tar .t { display: flex; align-items: center; gap: 9px; font-weight: bold; font-size: 13.3px; margin-bottom: 4px; }
+.tar.p .t .name { background: #F2D27A; color: #0d1b2a; border-radius: 12px; padding: 3px 12px; }
+.tar .pill { margin-left: auto; background: #fff; border: 1px solid ${P.dark}; color: ${P.dark}; border-radius: 9px; font-size: 9.3px; padding: 1px 9px; }
 .cov { display: flex; align-items: baseline; gap: 5px; } .cov i { flex: 1; border-bottom: 1px dotted #9aa3ad; }
-table.pt { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 11.3px; }
-.pt th, .pt td { border: 1px solid #c7ccd2; padding: 6px 10px; text-align: center; }
-.pt th { font-size: 8.5px; letter-spacing: 1.8px; }
+table.pt { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 11.2px; }
+.pt th, .pt td { border: 1px solid #c7ccd2; padding: 5px 10px; text-align: center; }
+.pt th { font-size: 9px; letter-spacing: 1.8px; }
 .pt .l { text-align: left; } .pt th.l { width: 49%; } .pt th.w { width: auto; }
-.notes { display: flex; border: 1px solid #c7ccd2; margin-top: 10px; font-size: 10.3px; line-height: 14.5px; }
+.notes { display: flex; border: 1px solid #c7ccd2; margin-top: 12px; font-size: 10.4px; line-height: 14px; }
 .notes > div { flex: 1; padding: 8px 13px; } .notes > div + div { border-left: 1px solid #c7ccd2; }
-.iban { display: flex; align-items: center; gap: 12px; margin-top: 12px; font-weight: bold; font-size: 15.5px; }
+.iban { display: flex; align-items: center; gap: 12px; margin-top: 12px; font-weight: bold; font-size: 16px; }
 .grid { display: flex; height: 29px; width: 572px; border: 1px solid #9aa3ad; }
 .grid span { flex: 1; } .grid span + span { border-left: 0.8px solid #9aa3ad; } .grid span.g { border-left: 2px solid #404040; }
 .band { display: flex; align-items: center; margin: 10px 0 0 auto; width: 49.4%; height: 29px; background: ${P.dark}; border-radius: 5px;
@@ -155,8 +161,8 @@ table.pt { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 
 .impreso .band { background: #fff; border: 1.5px solid ${P.dark}; color: ${P.dark}; }
 .impreso .band span { flex: none; width: 46%; margin-left: auto; border-left: 1px solid ${P.tintBorder}; }
 .impreso .band span::after { content: '€'; float: right; line-height: 26px; margin-right: 10px; color: #1c2430; }
-.decl { background: #f6f7f8; border: 1px solid #dde1e5; border-radius: 7px; padding: 8px 13px; margin-top: 14px; font-size: 7.6px; line-height: 10.6px; }
-.decl b { font-size: 9.5px; display: block; margin-bottom: 2px; }
+.decl { background: #f6f7f8; border: 1px solid #dde1e5; border-radius: 7px; padding: 8px 13px; margin-top: 12px; font-size: 8.5px; line-height: 11px; }
+.decl b { font-size: 10.4px; display: block; margin-bottom: 2px; }
 </style></head><body>
 
 <div class="page p1${IMPRESO ? ' impreso' : ''}">
@@ -206,7 +212,7 @@ table.pt { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 
   <div class="tars">
     <div class="tar b"><div class="t">${circ('tarifa_basica')}Tarifa Básica</div>
       ${cov([['Prestaciones en clínica privada', 'máx. 7.500 €'], ['Hospital público (Seguridad Social)', 'máx. 100.000 €'], [P.implante, P.implB]])}</div>
-    <div class="tar p"><div class="t">${circ('tarifa_premium')}<span class="name">Tarifa Premium</span><span class="pill">LÍMITES SUPERIORES</span></div>
+    <div class="tar p"><div class="t">${circ('tarifa_premium')}<span class="name">Tarifa Premium</span><span class="pill">COBERTURA AMPLIADA</span></div>
       ${cov([['Prestaciones en clínica privada', 'máx. 15.000 €'], ['Hospital público (Seguridad Social)', 'máx. 150.000 €'], [P.implante, P.implP]])}</div>
   </div>
   ${tabla}
