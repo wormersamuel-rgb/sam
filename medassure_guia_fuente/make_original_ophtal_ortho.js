@@ -4,7 +4,7 @@
 //
 // Uso: node make_original_ophtal_ortho.js ophtal originales/Formulario_-_Medassure_Ophtal.pdf originales/layout_ophtal.json
 //      node make_original_ophtal_ortho.js ortho  originales/Formulario_-_Medassure_Ortho.pdf  originales/layout_ortho.json
-// Versión para imprimir y rellenar a mano (sin layout): añada --imprimir, p. ej.
+// Versión para imprimir y rellenar a mano (sin recuadro de prima ni layout): añada --imprimir, p. ej.
 //      node make_original_ophtal_ortho.js ophtal ../medassure_ophtal_Formulario_imprimir.pdf --imprimir
 // Precios y coberturas: folletos «Flyer - Medassure Ophtal» y «Flyer - Medassure Ortho» (originales/).
 const fs = require('fs');
@@ -158,9 +158,8 @@ table.pt { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 
 .band { display: flex; align-items: center; margin: 10px 0 0 auto; width: 49.4%; height: 29px; background: ${P.dark}; border-radius: 5px;
         color: #fff; font-weight: bold; font-size: 12.5px; padding-left: 13px; }
 .band span { flex: 1; height: 100%; margin-left: 12px; }
-.impreso .band { background: #fff; border: 1.5px solid ${P.dark}; color: ${P.dark}; }
-.impreso .band span { flex: none; width: 46%; margin-left: auto; border-left: 1px solid ${P.tintBorder}; }
-.impreso .band span::after { content: '€'; float: right; line-height: 26px; margin-right: 10px; color: #1c2430; }
+.impreso .ul { height: 25px; }  /* paper: no premium box, the space goes to taller lines for handwriting */
+.impreso .iban { margin-top: 16px; } .impreso .iban + .row .fld { margin-top: 14px; }
 .decl { background: #f6f7f8; border: 1px solid #dde1e5; border-radius: 7px; padding: 8px 13px; margin-top: 12px; font-size: 8.5px; line-height: 11px; }
 .decl b { font-size: 10.4px; display: block; margin-bottom: 2px; }
 </style></head><body>
@@ -221,7 +220,7 @@ table.pt { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 
   <div class="row">${field('titular_cuenta', 'TITULAR DE LA CUENTA')}${field('direccion_titular', 'CALLE, NÚMERO / CP Y LOCALIDAD (titular de la cuenta)')}</div>
   <div class="iban">IBAN ES<div class="grid" data-f="iban">${Array.from({ length: 22 }, (_, i) =>
       `<span class="${[2, 6, 10, 14, 18].includes(i) ? 'g' : ''}"></span>`).join('')}</div></div>
-  <div class="band">PRIMA ÚNICA TOTAL<span data-f="prima_total"></span></div>
+  ${IMPRESO ? '' : '<div class="band">PRIMA ÚNICA TOTAL<span data-f="prima_total"></span></div>'}
   <div class="row">${field('p2_lugar_fecha', 'LUGAR, FECHA', 'sig')}${field('p2_firma', 'FIRMA TOMADOR DEL SEGURO Y TITULAR DE LA CUENTA', 'sig')}</div>
   <div class="decl"><b>Declaración, protección de datos y mandato SEPA</b>
     Confirmo que he leído y acepto las condiciones contractuales publicadas en www.medassure.es, incluidas las condiciones generales del seguro de reembolso de gastos
