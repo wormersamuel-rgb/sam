@@ -21,20 +21,20 @@ const P = {
     color: '#00A3E0', dark: '#066D96', tint: '#E6F6FC', tintBorder: '#A6DDF2',
     pie: 'Cirugía refractiva ocular y de cataratas',
     aviso: 'AVISO SOBRE LOS COSTES DERIVADOS DE COMPLICACIONES TRAS UNA CIRUGÍA OCULAR',
-    marco: `La cirugía refractiva con láser (LASIK, LASEK, PRK, SMILE) que se hace para dejar de depender de gafas o
-      lentillas <b>no forma parte, con carácter general, de la cartera de servicios comunes del Sistema Nacional de
+    marco: `La cirugía refractiva —con láser (LASIK, LASEK, PRK, SMILE) o con implante de lentes ICL— que se hace para
+      dejar de depender de gafas o lentillas <b>no forma parte, con carácter general, de la cartera de servicios comunes del Sistema Nacional de
       Salud</b>, y la cirugía de cataratas en una clínica privada la paga el propio paciente. Si surge una complicación
       grave, la sanidad pública atenderá al paciente, pero podrá reclamarle después los costes del tratamiento (por
       ejemplo, nuevas intervenciones e ingresos hospitalarios).`,
     privado: `Los seguros de salud privados, por lo general, <b>no cubren las complicaciones derivadas de intervenciones
-      oculares que la propia póliza no incluye</b>, como la cirugía refractiva con láser, o solo lo hacen de forma
+      oculares que la propia póliza no incluye</b>, como la cirugía refractiva, o solo lo hacen de forma
       limitada. Antes de operarse, le recomendamos consultar con su aseguradora si asumiría esos costes.`,
     extra: 'que cubre también el hospital público si la complicación pone en peligro la vida',
     medico: ['oftalmologo_clinica', 'OFTALMÓLOGO/A Y CLÍNICA'],
-    tipos: [['lasik', 'LASIK'], ['lasek', 'LASEK'], ['prk', 'PRK'], ['smile', 'SMILE'], ['cataratas', 'Cirugía de cataratas']],
-    implante: 'Implante / lente intraocular', implB: '1.200 €', implP: '1.800 €',
+    tipos: [['lasik', 'LASIK'], ['lasek', 'LASEK'], ['prk', 'PRK'], ['smile', 'SMILE'], ['cataratas', 'Cirugía de cataratas'], ['icl', 'Implante de lentes ICL']],
+    varias: true,  // several interventions per operation (surcharges and limits in make_form_ophtal_ortho.py)
     precios: { B: [99, 168, 375], P: [169, 258, 525] },
-    cubre: `Complicaciones fortuitas de la cirugía láser refractiva y de la cirugía de cataratas: honorarios médicos,
+    cubre: `Complicaciones fortuitas de la cirugía refractiva (láser o lentes ICL) y de la cirugía de cataratas: honorarios médicos,
       tratamiento ambulatorio o quirúrgico, anestesia, quirófano, estancia en clínica, medicamentos, material y
       laboratorio, UCI en clínica privada y hospital público si la complicación pone en peligro la vida.`,
     importante: `Solo se aseguran intervenciones aún no realizadas. Las prestaciones se pagan según el cuadro de
@@ -54,7 +54,6 @@ const P = {
     extra: 'que cubre también el hospital público si la complicación pone en peligro la vida',
     medico: ['cirujano_clinica', 'CIRUJANO/A Y CLÍNICA'],
     tipos: [['rodilla', 'Prótesis de rodilla'], ['cadera', 'Prótesis de cadera']],
-    implante: 'Implante / prótesis articular', implB: '1.500 €', implP: '3.000 €',
     precios: { B: 599, P: 899 },
     cubre: `Complicaciones fortuitas de la prótesis de rodilla o de cadera: honorarios médicos, tratamiento ambulatorio
       o quirúrgico, anestesia, quirófano, estancia en clínica, medicamentos, material y laboratorio, UCI en clínica
@@ -81,10 +80,12 @@ if (product === 'ophtal') {
   const d = ['1 AÑO', '2 AÑOS', '5 AÑOS'], k = ['1_ano', '2_anos', '5_anos'];
   tabla = `<table class="pt"><tr><th class="l">DURACIÓN DE LA COBERTURA · PRIMA ÚNICA</th>${d.map((t, i) =>
       `<th>${circ('duracion_' + k[i], 'sm')}${t}</th>`).join('')}</tr>
-    <tr><td class="l">Prima única por todo el periodo (IPS incluido)</td>${[0, 1, 2].map(i =>
-      `<td>${eur(P.precios.B[i])} / <span class="c">${eur(P.precios.P[i])}</span></td>`).join('')}</tr></table>`;
+    <tr><td class="l">Prima única por todo el periodo</td>${[0, 1, 2].map(i =>
+      `<td>${eur(P.precios.B[i])} / <span class="c">${eur(P.precios.P[i])}</span></td>`).join('')}</tr>
+    <tr><td class="l" colspan="4"><b>Varias intervenciones a la vez:</b> se suman +50 € con 2, +75 € con 3 y +100 € con 4
+      (solo Premium), en cualquier duración.</td></tr></table>`;
 } else {
-  tabla = `<table class="pt"><tr><th class="l">DURACIÓN DE LA COBERTURA</th><th class="w">PRIMA ÚNICA (IPS INCLUIDO)</th></tr>
+  tabla = `<table class="pt"><tr><th class="l">DURACIÓN DE LA COBERTURA</th><th class="w">PRIMA ÚNICA</th></tr>
     <tr><td class="l">1 año</td><td>${eur(P.precios.B)} / <span class="c">${eur(P.precios.P)}</span></td></tr></table>`;
 }
 
@@ -203,16 +204,16 @@ table.pt { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 
   <div class="row">${field('telefono', 'TELÉFONO')}${field('email', 'E-MAIL')}</div>
   ${sec(2, 'Datos de la intervención')}
   <div class="row">${field(P.medico[0], P.medico[1])}${field('fecha_intervencion', 'FECHA DE LA INTERVENCIÓN (DD/MM/AAAA)')}</div>
-  <div class="frame"><div class="lab">TIPO DE INTERVENCIÓN${product === 'ophtal' ? ' (marque una)' : ' (marque una · cobertura exclusiva para estas dos intervenciones)'}</div>
+  <div class="frame"><div class="lab">TIPO DE INTERVENCIÓN${product === 'ophtal' ? ' (marque una o varias)' : ' (marque una · cobertura exclusiva para estas dos intervenciones)'}</div>
     <div class="opts">${P.tipos.map(([k, t]) => `<label><span class="box" data-f="intervencion_${k}"></span>${t}</label>`).join('')}</div></div>
   ${sec(3, product === 'ophtal' ? 'Tarifa y duración' : 'Tarifa',
         product === 'ophtal' ? '(marque una tarifa y una duración · en cada casilla: precio Básica / <span class="c">Premium</span>)'
                              : '(marque una tarifa · precio Básica / <span class="c">Premium</span>)')}
   <div class="tars">
     <div class="tar b"><div class="t">${circ('tarifa_basica')}Tarifa Básica</div>
-      ${cov([['Prestaciones en clínica privada', 'máx. 7.500 €'], ['Hospital público (Seguridad Social)', 'máx. 100.000 €'], [P.implante, P.implB]])}</div>
+      ${cov([['Prestaciones en clínica privada', 'máx. 7.500 €'], ['Hospital público (Seguridad Social)', 'máx. 100.000 €'], ...(P.varias ? [['Intervenciones por operación', 'máx. 3']] : [])])}</div>
     <div class="tar p"><div class="t">${circ('tarifa_premium')}<span class="name">Tarifa Premium</span><span class="pill">COBERTURA AMPLIADA</span></div>
-      ${cov([['Prestaciones en clínica privada', 'máx. 15.000 €'], ['Hospital público (Seguridad Social)', 'máx. 150.000 €'], [P.implante, P.implP]])}</div>
+      ${cov([['Prestaciones en clínica privada', 'máx. 15.000 €'], ['Hospital público (Seguridad Social)', 'máx. 150.000 €'], ...(P.varias ? [['Intervenciones por operación', 'máx. 4']] : [])])}</div>
   </div>
   ${tabla}
   <div class="notes"><div><b>Qué cubre</b><br>${P.cubre}</div><div><b>¡Importante!</b><br>${P.importante}</div></div>

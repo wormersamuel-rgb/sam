@@ -7,7 +7,8 @@ Usage: python3 make_form_ophtal_ortho.py ophtal originales/Formulario_-_Medassur
        (add --debug to outline every field in red, to check that it sits on the printed form)
 
 The base PDF and the layout (position of every field, in points from the top-left corner of its page) come from
-make_original_ophtal_ortho.js. Prices are the ones in the flyers (originales/Flyer_-_Medassure_*.pdf).
+make_original_ophtal_ortho.js. Prices are the ones in the flyers (originales/Flyer_-_Medassure_*.pdf); for several ophtal interventions
+the surcharges of medassure beauty apply.
 """
 import json
 import sys
@@ -32,8 +33,11 @@ INK = colors.Color(0.05, 0.15, 0.35)
 # ---- tariff data from the flyers: B = Básica, P = Premium; ophtal: [1, 2, 5 years], ortho: 1 year ----
 PRICES = {'ophtal': {'B': [99, 168, 375], 'P': [169, 258, 525]},
           'ortho': {'B': 599, 'P': 899}}[product]
+# ophtal: several interventions in the same operation, same surcharges and limits as medassure beauty
+SURCHARGE = [0, 0, 50, 75, 100]  # by number of interventions
+MAX_N = {'B': 3, 'P': 4}
 TIPOS = {'ophtal': [('lasik', 'LASIK'), ('lasek', 'LASEK'), ('prk', 'PRK'), ('smile', 'SMILE'),
-                    ('cataratas', 'Cirugía de cataratas')],
+                    ('cataratas', 'Cirugía de cataratas'), ('icl', 'Implante de lentes ICL')],
          'ortho': [('rodilla', 'Prótesis de rodilla'), ('cadera', 'Prótesis de cadera')]}[product]
 MEDICO = {'ophtal': ('oftalmologo_clinica', 'Oftalmólogo/a y clínica'),
           'ortho': ('cirujano_clinica', 'Cirujano/a y clínica')}[product]
@@ -111,7 +115,10 @@ for name, tip in [('apellidos_nombre', 'Apellidos, nombre'), ('fecha_nacimiento'
                   ('p2_lugar_fecha', 'Lugar, fecha'), ('p2_firma', 'Firma del tomador y titular de la cuenta')]:
     line_field(name, tip)
 for k, tip in TIPOS:
-    radio('intervencion', 'intervencion_' + k, 'Tipo de intervención: ' + tip)
+    if product == 'ophtal':  # one or several
+        FIELDS[LAY['intervencion_' + k]['page']].append(lambda k=k, tip=tip: check('intervencion_' + k, 'Tipo de intervención: ' + tip))
+    else:  # knee or hip
+        radio('intervencion', 'intervencion_' + k, 'Tipo de intervención: ' + tip)
 radio('tarifa', 'tarifa_basica', 'Tarifa Básica', 1)
 radio('tarifa', 'tarifa_premium', 'Tarifa Premium', 1)
 if product == 'ophtal':
@@ -195,7 +202,8 @@ var MA_REQ = [
   ["titular_cuenta", "Titular de la cuenta"], ["direccion_titular", "Dirección del titular de la cuenta"],
   ["p2_lugar_fecha", "Lugar y fecha (página 2)"], ["p1_lugar_fecha", "Lugar y fecha (página 1)"]
 ];
-var MA_DUR = %(dur)s;  // ophtal: 1, 2 or 5 years; ortho: always 1 year
+var MA_DUR = %(dur)s;  // ophtal: 1, 2 or 5 years and several interventions; ortho: always 1 year, one intervention
+var MA_SUR = %(sur)s, MA_MAX = %(max)s;
 function maF(n) { return maDoc.getField(n); }
 function maVal(n) { var f = maF(n); return f ? String(f.valueAsString).replace(/^\s+|\s+$/g, "") : ""; }
 function maOn(n) { var f = maF(n); return f ? f.value != "Off" : false; }
@@ -206,13 +214,22 @@ function maEuro(v) {
 }
 function maTar() { return maOn("tarifa_basica") ? "B" : (maOn("tarifa_premium") ? "P" : ""); }
 function maDur() { return maOn("duracion_1_ano") ? 0 : (maOn("duracion_2_anos") ? 1 : (maOn("duracion_5_anos") ? 2 : -1)); }
+function maCount() { var n = 0; for (var i = 0; i < MA_TIPOS.length; i++) if (maOn(MA_TIPOS[i])) n++; return n; }
+function maTooMany() {
+  var tar = maTar(), n = maCount();
+  if (!MA_DUR || !tar || n <= MA_MAX[tar]) return "";
+  return "Tipo de intervención: con la tarifa " + (tar == "B" ? "Básica" : "Premium") + " se aseguran como máximo " +
+         MA_MAX[tar] + " intervenciones (ha marcado " + n + ")";
+}
 function maCalc() {
   var tar = maTar();
   if (!tar) return "elija tarifa";
   if (!MA_DUR) return maEuro(MA_PRICES[tar]);
   var d = maDur();
   if (d < 0) return "elija duración";
-  return maEuro(MA_PRICES[tar][d]);
+  var n = maCount();
+  if (n > MA_MAX[tar]) return "máx. " + MA_MAX[tar] + " intervenciones";
+  return maEuro(MA_PRICES[tar][d] + MA_SUR[n]);
 }
 function maEnviar() {
   if (maOn("decision_renunciar")) {
@@ -225,6 +242,7 @@ function maEnviar() {
   if (!maAny(MA_TIPOS)) miss.push("Tipo de intervención");
   if (!maAny(["tarifa_basica", "tarifa_premium"])) miss.push("Selección de tarifa");
   if (MA_DUR && maDur() < 0) miss.push("Duración (1, 2 o 5 años)");
+  if (maTooMany()) miss.push(maTooMany());
   var iban = maVal("iban").replace(/[^0-9]/g, "");
   if (iban.length != 22) miss.push("IBAN (faltan dígitos: hay " + iban.length + " de 22)");
   var em = maVal("email");
@@ -243,6 +261,7 @@ function maEnviar() {
 }
 ''' % {'prices': json.dumps(PRICES), 'tipos': json.dumps(['intervencion_' + k for k, _ in TIPOS]),
        'medico': MEDICO[0], 'medico_tip': MEDICO[1], 'dur': 'true' if product == 'ophtal' else 'false',
+       'sur': json.dumps(SURCHARGE), 'max': json.dumps(MAX_N),
        'product': product}
 w.add_js(JS)
 
