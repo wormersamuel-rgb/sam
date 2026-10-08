@@ -42,20 +42,18 @@ if product == 'ophtal':
     SURCHARGE = [0, 0, 50, 75, 100]  # by number of interventions
     MAX_N = {'B': 3, 'P': 4}
 else:
-    # cosmetics: unlimited treatments during the policy, no surcharge (ortho: one intervention)
-    SURCHARGE = [0] * 9
-    MAX_N = {'B': 8, 'P': 8}
+    # ortho: one intervention; cosmetics: no treatment to tick
+    SURCHARGE = [0, 0]
+    MAX_N = {'B': 1, 'P': 1}
 TIPOS = {'ophtal': [('lasik', 'LASIK'), ('lasek', 'LASEK'), ('prk', 'PRK'), ('smile', 'SMILE'),
                     ('cataratas', 'Cirugía de cataratas'), ('icl', 'Implante de lentes ICL')],
          'ortho': [('rodilla', 'Prótesis de rodilla'), ('cadera', 'Prótesis de cadera')],
-         'cosmetics': [('botox', 'Bótox (toxina botulínica)'), ('hialuronico', 'Ácido hialurónico'),
-                       ('rellenos', 'Otros rellenos reabsorbibles'), ('labios', 'Corrección de labios'), ('prp', 'PRP facial'),
-                       ('microneedling', 'Microneedling'), ('peeling', 'Peeling con ácido frutal'), ('otros', 'Otros')]}[product]
+         'cosmetics': []}[product]  # cosmetics: every treatment during the policy, nothing to tick
 MEDICO = {'ophtal': ('oftalmologo_clinica', 'Oftalmólogo/a y clínica'),
           'ortho': ('cirujano_clinica', 'Cirujano/a y clínica'),
           'cosmetics': ('medico_clinica', 'Médico/a y clínica')}[product]
 PREFIX, TIPO, TIPO_PL, FECHA = {  # checkbox prefix, "tipo de …" label, plural, date field
-    'cosmetics': ('tratamiento_', 'Tipo de tratamiento', 'tratamientos', ('fecha_tratamiento', 'Fecha del primer tratamiento')),
+    'cosmetics': ('', 'Tipo de tratamiento', 'tratamientos', ('fecha_tratamiento', 'Fecha del primer tratamiento')),
 }.get(product, ('intervencion_', 'Tipo de intervención', 'intervenciones', ('fecha_intervencion', 'Fecha de la intervención')))
 
 ov = tempfile.NamedTemporaryFile(suffix='.pdf', delete=False).name
@@ -135,8 +133,6 @@ for k, tip in TIPOS:
         FIELDS[LAY[PREFIX + k]['page']].append(lambda k=k, tip=tip: check(PREFIX + k, f'{TIPO}: {tip}'))
     else:  # knee or hip
         radio('intervencion', PREFIX + k, f'{TIPO}: {tip}')
-if 'tipo_otros_detalle' in LAY:
-    line_field('tipo_otros_detalle', 'Otros: indique qué tratamiento', h=10, size=8.5)
 radio('tarifa', 'tarifa_basica', 'Tarifa Básica', 1)
 radio('tarifa', 'tarifa_premium', 'Tarifa Premium', 1)
 if MULTI:
@@ -221,7 +217,7 @@ var MA_REQ = [
   ["p2_lugar_fecha", "Lugar y fecha (página 2)"], ["p1_lugar_fecha", "Lugar y fecha (página 1)"]
 ];
 var MA_DUR = %(dur)s;  // ophtal, cosmetics: 1, 2 or 5 years and several treatments; ortho: always 1 year, one intervention
-var MA_TIPO = "%(tipo)s", MA_TIPO_PL = "%(tipo_pl)s", MA_OTROS = "%(prefix)sotros";
+var MA_TIPO = "%(tipo)s", MA_TIPO_PL = "%(tipo_pl)s";
 var MA_SUR = %(sur)s, MA_MAX = %(max)s;
 function maF(n) { return maDoc.getField(n); }
 function maVal(n) { var f = maF(n); return f ? String(f.valueAsString).replace(/^\s+|\s+$/g, "") : ""; }
@@ -230,11 +226,6 @@ function maAny(names) { for (var i = 0; i < names.length; i++) if (maOn(names[i]
 function maEuro(v) {
   var s = v.toFixed(2).split("."), i = s[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   return i + "," + s[1] + " €";
-}
-function maLock(n, lock) {
-  var f = maF(n); if (!f) return;
-  if (f.readonly != lock) f.readonly = lock;
-  if (lock && f.value != "") f.value = "";
 }
 function maTar() { return maOn("tarifa_basica") ? "B" : (maOn("tarifa_premium") ? "P" : ""); }
 function maDur() { return maOn("duracion_1_ano") ? 0 : (maOn("duracion_2_anos") ? 1 : (maOn("duracion_5_anos") ? 2 : -1)); }
@@ -246,7 +237,6 @@ function maTooMany() {
          MA_MAX[tar] + " " + MA_TIPO_PL + " (ha marcado " + n + ")";
 }
 function maCalc() {
-  maLock("tipo_otros_detalle", !maOn(MA_OTROS));
   var tar = maTar();
   if (!tar) return "elija tarifa";
   if (!MA_DUR) return maEuro(MA_PRICES[tar]);
@@ -264,8 +254,7 @@ function maEnviar() {
   var miss = [];
   if (!maOn("decision_contratar")) miss.push("Su decisión (página 1)");
   for (var i = 0; i < MA_REQ.length; i++) if (maVal(MA_REQ[i][0]) == "") miss.push(MA_REQ[i][1]);
-  if (!maAny(MA_TIPOS)) miss.push(MA_TIPO);
-  if (maOn(MA_OTROS) && maVal("tipo_otros_detalle") == "") miss.push(MA_TIPO + ": indique cuál es «Otros»");
+  if (MA_TIPOS.length && !maAny(MA_TIPOS)) miss.push(MA_TIPO);
   if (!maAny(["tarifa_basica", "tarifa_premium"])) miss.push("Selección de tarifa");
   if (MA_DUR && maDur() < 0) miss.push("Duración (1, 2 o 5 años)");
   if (maTooMany()) miss.push(maTooMany());
@@ -287,7 +276,7 @@ function maEnviar() {
 }
 ''' % {'prices': json.dumps(PRICES), 'tipos': json.dumps([PREFIX + k for k, _ in TIPOS]),
        'medico': MEDICO[0], 'medico_tip': MEDICO[1], 'dur': 'true' if MULTI else 'false',
-       'tipo': TIPO, 'tipo_pl': TIPO_PL, 'prefix': PREFIX, 'fecha': FECHA[0], 'fecha_tip': FECHA[1],
+       'tipo': TIPO, 'tipo_pl': TIPO_PL, 'fecha': FECHA[0], 'fecha_tip': FECHA[1],
        'sur': json.dumps(SURCHARGE), 'max': json.dumps(MAX_N),
        'product': product}
 w.add_js(JS)

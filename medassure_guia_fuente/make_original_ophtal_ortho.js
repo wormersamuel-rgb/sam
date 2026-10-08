@@ -84,14 +84,14 @@ const P = {
       <b>complicaciones derivadas de ellos</b>. Antes del tratamiento, le recomendamos consultar con su aseguradora si
       asumiría esos costes.`,
     extra: 'que cubre también el tratamiento con hialuronidasa (Hylase) y cortisona y el hospital público si la complicación pone en peligro la vida',
-    sec2: 'Datos del tratamiento', prefijo: 'tratamiento_', fecha: ['fecha_tratamiento', 'FECHA DEL PRIMER TRATAMIENTO (DD/MM/AAAA)'],
+    sec2: 'Datos del tratamiento', fecha: ['fecha_tratamiento', 'FECHA DEL PRIMER TRATAMIENTO (DD/MM/AAAA)'],
     antes: 'del primer tratamiento', realizada: 'Una vez realizado el primer tratamiento',
     clinica: ['máx. 3.000 €', 'máx. 10.000 €'],
     medico: ['medico_clinica', 'MÉDICO/A Y CLÍNICA'],
-    tipoLab: 'TIPO DE TRATAMIENTO (marque uno o varios)',
-    tipos: [['botox', 'Bótox (toxina botulínica)'], ['hialuronico', 'Ácido hialurónico'], ['rellenos', 'Otros rellenos reabsorbibles'],
-            ['labios', 'Corrección de labios'], ['prp', 'PRP facial'], ['microneedling', 'Microneedling'],
-            ['peeling', 'Peeling con ácido frutal'], ['otros', 'Otros:']],
+    // no treatment to tick: the policy covers every non-surgical aesthetic treatment during its term
+    cubiertos: `<b>Tratamientos asegurados:</b> todos los tratamientos de medicina estética no quirúrgica que se haga
+      durante la vigencia de la póliza (bótox, ácido hialurónico y otros rellenos reabsorbibles, corrección de labios,
+      PRP facial, microneedling, peelings y muchos más). No hace falta indicarlos.`,
     cov3: ['Tratamientos médicos durante la vigencia', 'ilimitados', 'ilimitados'],
     notaTabla: '<b>Tratamientos médicos ilimitados</b> durante toda la vigencia de la póliza.',
     precios: { B: [39, 78, 195], P: [99, 198, 495] },
@@ -180,8 +180,7 @@ h2 { font-size: 14.7px; }
 .frame { border: 1px solid #c7ccd2; padding: 10px 13px 12px; margin-top: 12px; }
 .opts { display: flex; flex-wrap: wrap; gap: 8px 26px; margin-top: 9px; font-size: 11.2px; }
 .opts label { display: inline-flex; align-items: center; gap: 7px; }
-.ul.inl { display: inline-block; width: 150px; height: 15px; margin-left: -2px; }
-.impreso .ul.inl { height: 18px; }
+.frame.cub { font-size: 10.4px; line-height: 15px; }
 .tars { display: flex; gap: 22px; margin-top: 10px; }
 .tar { flex: 1; border-radius: 7px; padding: 9px 13px 10px; font-size: 11.2px; line-height: 16px; }
 .tar.b { background: #f0f2f4; } .tar.p { background: #FDF3D3; border: 1px solid #F2D27A; }
@@ -246,9 +245,9 @@ table.pt { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 
   <div class="row">${field('telefono', 'TELÉFONO')}${field('email', 'E-MAIL')}</div>
   ${sec(2, P.sec2)}
   <div class="row">${field(P.medico[0], P.medico[1])}${field(...P.fecha)}</div>
-  <div class="frame"><div class="lab">${P.tipoLab}</div>
-    <div class="opts">${P.tipos.map(([k, t]) => `<label><span class="box" data-f="${P.prefijo}${k}"></span>${t}${k === 'otros'
-      ? '<span class="ul inl" data-f="tipo_otros_detalle"></span>' : ''}</label>`).join('')}</div></div>
+  ${P.tipos ? `<div class="frame"><div class="lab">${P.tipoLab}</div>
+    <div class="opts">${P.tipos.map(([k, t]) => `<label><span class="box" data-f="${P.prefijo}${k}"></span>${t}</label>`).join('')}</div></div>`
+  : `<div class="frame cub">${P.cubiertos}</div>`}
   ${sec(3, MULTI ? 'Tarifa y duración' : 'Tarifa',
         MULTI ? '(marque una tarifa y una duración · en cada casilla: precio Básica / <span class="c">Premium</span>)'
                              : '(marque una tarifa · precio Básica / <span class="c">Premium</span>)')}
