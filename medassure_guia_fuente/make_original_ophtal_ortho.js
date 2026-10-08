@@ -1,12 +1,13 @@
-// Formularios base (sin campos) de medassure ophtal y medassure ortho, con el mismo diseño que los de dental y adipo.
+// Formularios base (sin campos) de medassure ophtal, ortho y cosmetics, con el mismo diseño que los de dental y adipo.
 // Además del PDF guarda la posición (en puntos, desde la esquina superior izquierda de cada página) de cada
 // elemento marcado con data-f, para que make_form_ophtal_ortho.py coloque encima los campos rellenables.
 //
 // Uso: node make_original_ophtal_ortho.js ophtal originales/Formulario_-_Medassure_Ophtal.pdf originales/layout_ophtal.json
 //      node make_original_ophtal_ortho.js ortho  originales/Formulario_-_Medassure_Ortho.pdf  originales/layout_ortho.json
+//      node make_original_ophtal_ortho.js cosmetics originales/Formulario_-_Medassure_Cosmetics.pdf originales/layout_cosmetics.json
 // Versión para imprimir y rellenar a mano (sin recuadro de prima ni layout): añada --imprimir, p. ej.
 //      node make_original_ophtal_ortho.js ophtal ../medassure_ophtal_Formulario_imprimir.pdf --imprimir
-// Precios y coberturas: folletos «Flyer - Medassure Ophtal» y «Flyer - Medassure Ortho» (originales/).
+// Precios y coberturas: folletos «Flyer - Medassure Ophtal / Ortho / Cosmetics» (originales/).
 const fs = require('fs');
 const path = require('path');
 // DM Sans (SIL OFL, assets/) is the typeface of the medassure logo, as in the dental and adipo forms and the flyers
@@ -30,9 +31,15 @@ const P = {
       oculares que la propia póliza no incluye</b>, como la cirugía refractiva, o solo lo hacen de forma
       limitada. Antes de operarse, le recomendamos consultar con su aseguradora si asumiría esos costes.`,
     extra: 'que cubre también el hospital público si la complicación pone en peligro la vida',
+    sec2: 'Datos de la intervención', prefijo: 'intervencion_', fecha: ['fecha_intervencion', 'FECHA DE LA INTERVENCIÓN (DD/MM/AAAA)'],
+    antes: 'de la intervención', realizada: 'Una vez realizada la intervención',
+    clinica: ['máx. 7.500 €', 'máx. 15.000 €'],
     medico: ['oftalmologo_clinica', 'OFTALMÓLOGO/A Y CLÍNICA'],
+    tipoLab: 'TIPO DE INTERVENCIÓN (marque una o varias)',
+    cov3: ['Intervenciones por operación', 'máx. 3', 'máx. 4'],
+    notaTabla: `<b>Varias intervenciones a la vez:</b> se suman +50 € con 2, +75 € con 3 y +100 € con 4
+      (solo Premium), en cualquier duración.`,
     tipos: [['lasik', 'LASIK'], ['lasek', 'LASEK'], ['prk', 'PRK'], ['smile', 'SMILE'], ['cataratas', 'Cirugía de cataratas'], ['icl', 'Implante de lentes ICL']],
-    varias: true,  // several interventions per operation (surcharges and limits in make_form_ophtal_ortho.py)
     precios: { B: [99, 168, 375], P: [169, 258, 525] },
     cubre: `Complicaciones fortuitas de la cirugía refractiva (láser o lentes ICL) y de la cirugía de cataratas: honorarios médicos,
       tratamiento ambulatorio o quirúrgico, anestesia, quirófano, estancia en clínica, medicamentos, material y
@@ -52,7 +59,11 @@ const P = {
       que la propia póliza no incluye</b>, o solo lo hacen de forma limitada. Antes de operarse, le recomendamos
       consultar con su aseguradora si asumiría esos costes.`,
     extra: 'que cubre también el hospital público si la complicación pone en peligro la vida',
+    sec2: 'Datos de la intervención', prefijo: 'intervencion_', fecha: ['fecha_intervencion', 'FECHA DE LA INTERVENCIÓN (DD/MM/AAAA)'],
+    antes: 'de la intervención', realizada: 'Una vez realizada la intervención',
+    clinica: ['máx. 7.500 €', 'máx. 15.000 €'],
     medico: ['cirujano_clinica', 'CIRUJANO/A Y CLÍNICA'],
+    tipoLab: 'TIPO DE INTERVENCIÓN (marque una · cobertura exclusiva para estas dos intervenciones)',
     tipos: [['rodilla', 'Prótesis de rodilla'], ['cadera', 'Prótesis de cadera']],
     precios: { B: 599, P: 899 },
     cubre: `Complicaciones fortuitas de la prótesis de rodilla o de cadera: honorarios médicos, tratamiento ambulatorio
@@ -61,8 +72,38 @@ const P = {
     importante: `Cobertura exclusiva para prótesis de rodilla y de cadera, y solo para intervenciones aún no realizadas.
       Las prestaciones se pagan según el cuadro de indemnización de medassure ortho.`,
   },
+  cosmetics: {
+    color: '#E74C5E', dark: '#8A2030', tint: '#FDEEF0', tintBorder: '#F5B8C0',
+    pie: 'Medicina estética no quirúrgica',
+    aviso: 'AVISO SOBRE LOS COSTES DERIVADOS DE COMPLICACIONES TRAS UN TRATAMIENTO ESTÉTICO',
+    marco: `Los tratamientos de medicina estética (por ejemplo, bótox, ácido hialurónico y otros rellenos) <b>no forman
+      parte de la cartera de servicios comunes del Sistema Nacional de Salud</b> (Real Decreto 1030/2006). Si surge una
+      complicación (por ejemplo, una infección, una necrosis o una reacción adversa a un relleno), la sanidad pública
+      atenderá al paciente, pero podrá reclamarle después los costes del tratamiento.`,
+    privado: `Los seguros de salud privados no cubren los tratamientos estéticos y, por lo general, tampoco las
+      <b>complicaciones derivadas de ellos</b>. Antes del tratamiento, le recomendamos consultar con su aseguradora si
+      asumiría esos costes.`,
+    extra: 'que cubre también el tratamiento con hialuronidasa (Hylase) y cortisona y el hospital público si la complicación pone en peligro la vida',
+    sec2: 'Datos del tratamiento', prefijo: 'tratamiento_', fecha: ['fecha_tratamiento', 'FECHA DEL PRIMER TRATAMIENTO (DD/MM/AAAA)'],
+    antes: 'del primer tratamiento', realizada: 'Una vez realizado el primer tratamiento',
+    clinica: ['máx. 3.000 €', 'máx. 10.000 €'],
+    medico: ['medico_clinica', 'MÉDICO/A Y CLÍNICA'],
+    tipoLab: 'TIPO DE TRATAMIENTO (marque uno o varios)',
+    tipos: [['botox', 'Bótox (toxina botulínica)'], ['hialuronico', 'Ácido hialurónico'], ['rellenos', 'Otros rellenos reabsorbibles'],
+            ['labios', 'Corrección de labios'], ['prp', 'PRP facial'], ['microneedling', 'Microneedling'],
+            ['peeling', 'Peeling con ácido frutal'], ['otros', 'Otros:']],
+    cov3: ['Tratamientos médicos durante la vigencia', 'ilimitados', 'ilimitados'],
+    notaTabla: '<b>Tratamientos médicos ilimitados</b> durante toda la vigencia de la póliza.',
+    precios: { B: [39, 78, 195], P: [99, 198, 495] },
+    cubre: `Complicaciones fortuitas de la medicina estética no quirúrgica: honorarios médicos, tratamiento ambulatorio
+      o quirúrgico, anestesia, quirófano, estancia en clínica, medicamentos (también hialuronidasa y cortisona),
+      material y laboratorio, UCI en clínica privada y hospital público si peligra la vida.`,
+    importante: `Solo se aseguran tratamientos aún no realizados. Las prestaciones se pagan según el cuadro de
+      indemnización de medassure cosmetics.`,
+  },
 }[product];
-if (!P) throw new Error('producto: ophtal u ortho');
+if (!P) throw new Error('producto: ophtal, ortho o cosmetics');
+const MULTI = Array.isArray(P.precios.B);  // 1, 2 or 5 years
 
 const eur = n => n.toLocaleString('de-DE') + ' €';
 const contacto = `IberAssekuranz Brokers Correduría de Seguros, S.L.<br>Calle Princesa 25, 2-8 · 28008 Madrid<br>
@@ -76,14 +117,13 @@ const sec = (n, t, note = '') => `<div class="sec"><span class="num">${n}</span>
 const cov = (rows) => rows.map(([a, b]) => `<div class="cov"><span>${a}</span><i></i><b>${b}</b></div>`).join('');
 
 let tabla;
-if (product === 'ophtal') {
+if (MULTI) {
   const d = ['1 AÑO', '2 AÑOS', '5 AÑOS'], k = ['1_ano', '2_anos', '5_anos'];
   tabla = `<table class="pt"><tr><th class="l">DURACIÓN DE LA COBERTURA · PRIMA ÚNICA</th>${d.map((t, i) =>
       `<th>${circ('duracion_' + k[i], 'sm')}${t}</th>`).join('')}</tr>
     <tr><td class="l">Prima única por todo el periodo</td>${[0, 1, 2].map(i =>
       `<td>${eur(P.precios.B[i])} / <span class="c">${eur(P.precios.P[i])}</span></td>`).join('')}</tr>
-    <tr><td class="l" colspan="4"><b>Varias intervenciones a la vez:</b> se suman +50 € con 2, +75 € con 3 y +100 € con 4
-      (solo Premium), en cualquier duración.</td></tr></table>`;
+    <tr><td class="l" colspan="4">${P.notaTabla}</td></tr></table>`;
 } else {
   tabla = `<table class="pt"><tr><th class="l">DURACIÓN DE LA COBERTURA</th><th class="w">PRIMA ÚNICA</th></tr>
     <tr><td class="l">1 año</td><td>${eur(P.precios.B)} / <span class="c">${eur(P.precios.P)}</span></td></tr></table>`;
@@ -140,6 +180,8 @@ h2 { font-size: 14.7px; }
 .frame { border: 1px solid #c7ccd2; padding: 10px 13px 12px; margin-top: 12px; }
 .opts { display: flex; flex-wrap: wrap; gap: 8px 26px; margin-top: 9px; font-size: 11.2px; }
 .opts label { display: inline-flex; align-items: center; gap: 7px; }
+.ul.inl { display: inline-block; width: 150px; height: 15px; margin-left: -2px; }
+.impreso .ul.inl { height: 18px; }
 .tars { display: flex; gap: 22px; margin-top: 10px; }
 .tar { flex: 1; border-radius: 7px; padding: 9px 13px 10px; font-size: 11.2px; line-height: 16px; }
 .tar.b { background: #f0f2f4; } .tar.p { background: #FDF3D3; border: 1px solid #F2D27A; }
@@ -159,8 +201,8 @@ table.pt { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 
 .band { display: flex; align-items: center; margin: 10px 0 0 auto; width: 49.4%; height: 29px; background: ${P.dark}; border-radius: 5px;
         color: #fff; font-weight: bold; font-size: 12.5px; padding-left: 13px; }
 .band span { flex: 1; height: 100%; margin-left: 12px; }
-.impreso .ul { height: 25px; }  /* paper: no premium box, the space goes to taller lines for handwriting */
-.impreso .iban { margin-top: 16px; } .impreso .iban + .row .fld { margin-top: 14px; }
+.impreso .ul { height: 24px; } .impreso .fld { margin-top: 4px; } .impreso .decl { margin-top: 6px; }  /* paper: no premium box, the space goes to taller lines for handwriting */
+.impreso .iban { margin-top: 14px; } .impreso .iban + .row .fld { margin-top: 12px; }
 .decl { background: #f6f7f8; border: 1px solid #dde1e5; border-radius: 7px; padding: 8px 13px; margin-top: 12px; font-size: 8.5px; line-height: 11px; }
 .decl b { font-size: 10.4px; display: block; margin-bottom: 2px; }
 </style></head><body>
@@ -194,26 +236,27 @@ table.pt { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 
   <div class="head">${logo}<div class="addr">${contacto.replace('<br>', ' · ').replace('<br><span', ' · <span')}</div></div>
   <div class="info"><span class="i">i</span><div><b>Cómo funciona:</b> ${IMPRESO
     ? `rellene todos los campos con letra clara, firme y envíe la solicitud (escaneada o en foto) a
-    <b>info@medassure.es como máximo 1 día antes de la intervención</b>, o entréguela en la clínica.`
+    <b>info@medassure.es como máximo 1 día antes ${P.antes}</b>, o entréguela en la clínica.`
     : `rellene todos los campos y envíe la solicitud a
-    <b>info@medassure.es como máximo 1 día antes de la intervención</b>.`} Consultas: <b>+34 672 69 68 21</b>
+    <b>info@medassure.es como máximo 1 día antes ${P.antes}</b>.`} Consultas: <b>+34 672 69 68 21</b>
     (9–18 h; viernes, julio y agosto, 9–15 h).</div></div>
   ${sec(1, 'Datos personales del tomador del seguro')}
   <div class="row">${field('apellidos_nombre', 'APELLIDOS, NOMBRE')}${field('fecha_nacimiento', 'FECHA DE NACIMIENTO (DD/MM/AAAA)')}</div>
   <div class="row">${field('calle_numero', 'CALLE, NÚMERO')}${field('cp_localidad', 'CÓDIGO POSTAL Y LOCALIDAD')}</div>
   <div class="row">${field('telefono', 'TELÉFONO')}${field('email', 'E-MAIL')}</div>
-  ${sec(2, 'Datos de la intervención')}
-  <div class="row">${field(P.medico[0], P.medico[1])}${field('fecha_intervencion', 'FECHA DE LA INTERVENCIÓN (DD/MM/AAAA)')}</div>
-  <div class="frame"><div class="lab">TIPO DE INTERVENCIÓN${product === 'ophtal' ? ' (marque una o varias)' : ' (marque una · cobertura exclusiva para estas dos intervenciones)'}</div>
-    <div class="opts">${P.tipos.map(([k, t]) => `<label><span class="box" data-f="intervencion_${k}"></span>${t}</label>`).join('')}</div></div>
-  ${sec(3, product === 'ophtal' ? 'Tarifa y duración' : 'Tarifa',
-        product === 'ophtal' ? '(marque una tarifa y una duración · en cada casilla: precio Básica / <span class="c">Premium</span>)'
+  ${sec(2, P.sec2)}
+  <div class="row">${field(P.medico[0], P.medico[1])}${field(...P.fecha)}</div>
+  <div class="frame"><div class="lab">${P.tipoLab}</div>
+    <div class="opts">${P.tipos.map(([k, t]) => `<label><span class="box" data-f="${P.prefijo}${k}"></span>${t}${k === 'otros'
+      ? '<span class="ul inl" data-f="tipo_otros_detalle"></span>' : ''}</label>`).join('')}</div></div>
+  ${sec(3, MULTI ? 'Tarifa y duración' : 'Tarifa',
+        MULTI ? '(marque una tarifa y una duración · en cada casilla: precio Básica / <span class="c">Premium</span>)'
                              : '(marque una tarifa · precio Básica / <span class="c">Premium</span>)')}
   <div class="tars">
     <div class="tar b"><div class="t">${circ('tarifa_basica')}Tarifa Básica</div>
-      ${cov([['Prestaciones en clínica privada', 'máx. 7.500 €'], ['Hospital público (Seguridad Social)', 'máx. 100.000 €'], ...(P.varias ? [['Intervenciones por operación', 'máx. 3']] : [])])}</div>
+      ${cov([['Prestaciones en clínica privada', P.clinica[0]], ['Hospital público (Seguridad Social)', 'máx. 100.000 €'], ...(P.cov3 ? [[P.cov3[0], P.cov3[1]]] : [])])}</div>
     <div class="tar p"><div class="t">${circ('tarifa_premium')}<span class="name">Tarifa Premium</span><span class="pill">COBERTURA AMPLIADA</span></div>
-      ${cov([['Prestaciones en clínica privada', 'máx. 15.000 €'], ['Hospital público (Seguridad Social)', 'máx. 150.000 €'], ...(P.varias ? [['Intervenciones por operación', 'máx. 4']] : [])])}</div>
+      ${cov([['Prestaciones en clínica privada', P.clinica[1]], ['Hospital público (Seguridad Social)', 'máx. 150.000 €'], ...(P.cov3 ? [[P.cov3[0], P.cov3[2]]] : [])])}</div>
   </div>
   ${tabla}
   <div class="notes"><div><b>Qué cubre</b><br>${P.cubre}</div><div><b>¡Importante!</b><br>${P.importante}</div></div>
@@ -228,7 +271,7 @@ table.pt { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 
     derivados de complicaciones fortuitas de medassure ${product} y la información precontractual, y renuncio a recibirlas en papel. Declaro que los datos facilitados son
     veraces y completos. El tomador del seguro y el titular de la cuenta autorizan a Jahnke Hoyer &amp; Cie. GmbH a contactar con ellos ante consultas técnicas y a tratar
     electrónicamente los datos facilitados para tramitar la solicitud. El titular de la cuenta autoriza a Jahnke Hoyer &amp; Cie. GmbH a cobrar la prima única mediante adeudo directo
-    SEPA en la cuenta indicada; dispone de ocho semanas desde la fecha del cargo para solicitar su devolución. Una vez realizada la intervención, la prima única corresponde
+    SEPA en la cuenta indicada; dispone de ocho semanas desde la fecha del cargo para solicitar su devolución. ${P.realizada}, la prima única corresponde
     íntegramente a la aseguradora. La comparativa de coberturas es un resumen; encontrará la información completa en su documentación contractual.</div>
   ${footer(2)}
 </div>
@@ -247,11 +290,17 @@ table.pt { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 
       out[el.dataset.f] = { page: pages.indexOf(pg), x: (r.left - o.left) * k, top: (r.top - o.top) * k, w: r.width * k, h: r.height * k };
     }
     // bottom of the page content, to check nothing overflows into the footer
-    out._overflow = pages.map(pg => [...pg.children].some(c => c.getBoundingClientRect().bottom > pg.getBoundingClientRect().bottom + 0.5));
+    // content must end above the signature lines (page 1) and the footer
+    out._overflow = pages.map(pg => {
+      const limit = Math.min(...[...pg.querySelectorAll('.sigs, .foot')].map(e => e.getBoundingClientRect().top)) - 4;
+      // px of overlap (0 = fits)
+      return Math.max(0, ...[...pg.children].filter(c => !c.matches('.sigs, .foot')).map(c => Math.ceil(c.getBoundingClientRect().bottom - limit)));
+    });
     return out;
   });
   await p.pdf({ path: pdfOut, preferCSSPageSize: true, printBackground: true });
   if (layoutOut) fs.writeFileSync(layoutOut, JSON.stringify(layout, null, 1));
   await b.close();
-  console.log(pdfOut, Object.keys(layout).length - 1, 'posiciones; desborda:', layout._overflow);
+  console.log(pdfOut, Object.keys(layout).length - 1, 'posiciones; px que se salen por página:', layout._overflow);
+  if (layout._overflow.some(Boolean)) process.exitCode = 1;
 })();

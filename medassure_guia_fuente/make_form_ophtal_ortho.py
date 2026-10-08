@@ -1,9 +1,11 @@
-"""Fillable versions of the medassure ophtal and medassure ortho forms (same features as dental and adipo).
+"""Fillable versions of the medassure ophtal, ortho and cosmetics forms (same features as dental and adipo).
 
 Usage: python3 make_form_ophtal_ortho.py ophtal originales/Formulario_-_Medassure_Ophtal.pdf originales/layout_ophtal.json \
            ../medassure_ophtal_Formulario_rellenable.pdf
        python3 make_form_ophtal_ortho.py ortho  originales/Formulario_-_Medassure_Ortho.pdf  originales/layout_ortho.json \
            ../medassure_ortho_Formulario_rellenable.pdf
+       python3 make_form_ophtal_ortho.py cosmetics originales/Formulario_-_Medassure_Cosmetics.pdf \
+           originales/layout_cosmetics.json ../medassure_cosmetics_Formulario_rellenable.pdf
        (add --debug to outline every field in red, to check that it sits on the printed form)
 
 The base PDF and the layout (position of every field, in points from the top-left corner of its page) come from
@@ -23,24 +25,38 @@ from pypdf.generic import (NameObject, DictionaryObject, TextStringObject, Array
 args = [a for a in sys.argv[1:] if a != '--debug']
 DEBUG = '--debug' in sys.argv
 product, src, layout_path, out = args
-assert product in ('ophtal', 'ortho')
+assert product in ('ophtal', 'ortho', 'cosmetics')
 orig = PdfReader(src)
 LAY = json.load(open(layout_path))
 W, H = [float(v) for v in orig.pages[0].mediabox[2:]]
 T = colors.Color(1, 1, 1, alpha=0)
 INK = colors.Color(0.05, 0.15, 0.35)
 
-# ---- tariff data from the flyers: B = Básica, P = Premium; ophtal: [1, 2, 5 years], ortho: 1 year ----
+# ---- tariff data from the flyers: B = Básica, P = Premium; ophtal, cosmetics: [1, 2, 5 years], ortho: 1 year ----
 PRICES = {'ophtal': {'B': [99, 168, 375], 'P': [169, 258, 525]},
-          'ortho': {'B': 599, 'P': 899}}[product]
-# ophtal: several interventions in the same operation, same surcharges and limits as medassure beauty
-SURCHARGE = [0, 0, 50, 75, 100]  # by number of interventions
-MAX_N = {'B': 3, 'P': 4}
+          'ortho': {'B': 599, 'P': 899},
+          'cosmetics': {'B': [39, 78, 195], 'P': [99, 198, 495]}}[product]
+MULTI = product != 'ortho'  # one or several treatments, 1/2/5 years (ortho: knee or hip, 1 year)
+if product == 'ophtal':
+    # several interventions in the same operation, same surcharges and limits as medassure beauty
+    SURCHARGE = [0, 0, 50, 75, 100]  # by number of interventions
+    MAX_N = {'B': 3, 'P': 4}
+else:
+    # cosmetics: unlimited treatments during the policy, no surcharge (ortho: one intervention)
+    SURCHARGE = [0] * 9
+    MAX_N = {'B': 8, 'P': 8}
 TIPOS = {'ophtal': [('lasik', 'LASIK'), ('lasek', 'LASEK'), ('prk', 'PRK'), ('smile', 'SMILE'),
                     ('cataratas', 'Cirugía de cataratas'), ('icl', 'Implante de lentes ICL')],
-         'ortho': [('rodilla', 'Prótesis de rodilla'), ('cadera', 'Prótesis de cadera')]}[product]
+         'ortho': [('rodilla', 'Prótesis de rodilla'), ('cadera', 'Prótesis de cadera')],
+         'cosmetics': [('botox', 'Bótox (toxina botulínica)'), ('hialuronico', 'Ácido hialurónico'),
+                       ('rellenos', 'Otros rellenos reabsorbibles'), ('labios', 'Corrección de labios'), ('prp', 'PRP facial'),
+                       ('microneedling', 'Microneedling'), ('peeling', 'Peeling con ácido frutal'), ('otros', 'Otros')]}[product]
 MEDICO = {'ophtal': ('oftalmologo_clinica', 'Oftalmólogo/a y clínica'),
-          'ortho': ('cirujano_clinica', 'Cirujano/a y clínica')}[product]
+          'ortho': ('cirujano_clinica', 'Cirujano/a y clínica'),
+          'cosmetics': ('medico_clinica', 'Médico/a y clínica')}[product]
+PREFIX, TIPO, TIPO_PL, FECHA = {  # checkbox prefix, "tipo de …" label, plural, date field
+    'cosmetics': ('tratamiento_', 'Tipo de tratamiento', 'tratamientos', ('fecha_tratamiento', 'Fecha del primer tratamiento')),
+}.get(product, ('intervencion_', 'Tipo de intervención', 'intervenciones', ('fecha_intervencion', 'Fecha de la intervención')))
 
 ov = tempfile.NamedTemporaryFile(suffix='.pdf', delete=False).name
 c = canvas.Canvas(ov, pagesize=(W, H))
@@ -109,19 +125,21 @@ sign_field('p1_firma', 'Firma del/de la paciente')
 for name, tip in [('apellidos_nombre', 'Apellidos, nombre'), ('fecha_nacimiento', 'Fecha de nacimiento (DD/MM/AAAA)'),
                   ('calle_numero', 'Calle, número'), ('cp_localidad', 'Código postal y localidad'),
                   ('telefono', 'Teléfono'), ('email', 'E-mail'), MEDICO,
-                  ('fecha_intervencion', 'Fecha de la intervención (DD/MM/AAAA)'),
+                  (FECHA[0], FECHA[1] + ' (DD/MM/AAAA)'),
                   ('titular_cuenta', 'Titular de la cuenta'),
                   ('direccion_titular', 'Calle, número / CP y localidad del titular'),
                   ('p2_lugar_fecha', 'Lugar, fecha'), ('p2_firma', 'Firma del tomador y titular de la cuenta')]:
     line_field(name, tip)
 for k, tip in TIPOS:
-    if product == 'ophtal':  # one or several
-        FIELDS[LAY['intervencion_' + k]['page']].append(lambda k=k, tip=tip: check('intervencion_' + k, 'Tipo de intervención: ' + tip))
+    if MULTI:  # one or several
+        FIELDS[LAY[PREFIX + k]['page']].append(lambda k=k, tip=tip: check(PREFIX + k, f'{TIPO}: {tip}'))
     else:  # knee or hip
-        radio('intervencion', 'intervencion_' + k, 'Tipo de intervención: ' + tip)
+        radio('intervencion', PREFIX + k, f'{TIPO}: {tip}')
+if 'tipo_otros_detalle' in LAY:
+    line_field('tipo_otros_detalle', 'Otros: indique qué tratamiento', h=10, size=8.5)
 radio('tarifa', 'tarifa_basica', 'Tarifa Básica', 1)
 radio('tarifa', 'tarifa_premium', 'Tarifa Premium', 1)
-if product == 'ophtal':
+if MULTI:
     for k, tip in [('1_ano', '1 año'), ('2_anos', '2 años'), ('5_anos', '5 años')]:
         radio('duracion', 'duracion_' + k, 'Duración: ' + tip, 1)
 
@@ -198,11 +216,12 @@ var MA_REQ = [
   ["apellidos_nombre", "Apellidos, nombre"], ["fecha_nacimiento", "Fecha de nacimiento"],
   ["calle_numero", "Calle, número"], ["cp_localidad", "Código postal y localidad"],
   ["telefono", "Teléfono"], ["email", "E-mail"], ["%(medico)s", "%(medico_tip)s"],
-  ["fecha_intervencion", "Fecha de la intervención"],
+  ["%(fecha)s", "%(fecha_tip)s"],
   ["titular_cuenta", "Titular de la cuenta"], ["direccion_titular", "Dirección del titular de la cuenta"],
   ["p2_lugar_fecha", "Lugar y fecha (página 2)"], ["p1_lugar_fecha", "Lugar y fecha (página 1)"]
 ];
-var MA_DUR = %(dur)s;  // ophtal: 1, 2 or 5 years and several interventions; ortho: always 1 year, one intervention
+var MA_DUR = %(dur)s;  // ophtal, cosmetics: 1, 2 or 5 years and several treatments; ortho: always 1 year, one intervention
+var MA_TIPO = "%(tipo)s", MA_TIPO_PL = "%(tipo_pl)s", MA_OTROS = "%(prefix)sotros";
 var MA_SUR = %(sur)s, MA_MAX = %(max)s;
 function maF(n) { return maDoc.getField(n); }
 function maVal(n) { var f = maF(n); return f ? String(f.valueAsString).replace(/^\s+|\s+$/g, "") : ""; }
@@ -212,23 +231,29 @@ function maEuro(v) {
   var s = v.toFixed(2).split("."), i = s[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   return i + "," + s[1] + " €";
 }
+function maLock(n, lock) {
+  var f = maF(n); if (!f) return;
+  if (f.readonly != lock) f.readonly = lock;
+  if (lock && f.value != "") f.value = "";
+}
 function maTar() { return maOn("tarifa_basica") ? "B" : (maOn("tarifa_premium") ? "P" : ""); }
 function maDur() { return maOn("duracion_1_ano") ? 0 : (maOn("duracion_2_anos") ? 1 : (maOn("duracion_5_anos") ? 2 : -1)); }
 function maCount() { var n = 0; for (var i = 0; i < MA_TIPOS.length; i++) if (maOn(MA_TIPOS[i])) n++; return n; }
 function maTooMany() {
   var tar = maTar(), n = maCount();
   if (!MA_DUR || !tar || n <= MA_MAX[tar]) return "";
-  return "Tipo de intervención: con la tarifa " + (tar == "B" ? "Básica" : "Premium") + " se aseguran como máximo " +
-         MA_MAX[tar] + " intervenciones (ha marcado " + n + ")";
+  return MA_TIPO + ": con la tarifa " + (tar == "B" ? "Básica" : "Premium") + " se aseguran como máximo " +
+         MA_MAX[tar] + " " + MA_TIPO_PL + " (ha marcado " + n + ")";
 }
 function maCalc() {
+  maLock("tipo_otros_detalle", !maOn(MA_OTROS));
   var tar = maTar();
   if (!tar) return "elija tarifa";
   if (!MA_DUR) return maEuro(MA_PRICES[tar]);
   var d = maDur();
   if (d < 0) return "elija duración";
   var n = maCount();
-  if (n > MA_MAX[tar]) return "máx. " + MA_MAX[tar] + " intervenciones";
+  if (n > MA_MAX[tar]) return "máx. " + MA_MAX[tar] + " " + MA_TIPO_PL;
   return maEuro(MA_PRICES[tar][d] + MA_SUR[n]);
 }
 function maEnviar() {
@@ -239,7 +264,8 @@ function maEnviar() {
   var miss = [];
   if (!maOn("decision_contratar")) miss.push("Su decisión (página 1)");
   for (var i = 0; i < MA_REQ.length; i++) if (maVal(MA_REQ[i][0]) == "") miss.push(MA_REQ[i][1]);
-  if (!maAny(MA_TIPOS)) miss.push("Tipo de intervención");
+  if (!maAny(MA_TIPOS)) miss.push(MA_TIPO);
+  if (maOn(MA_OTROS) && maVal("tipo_otros_detalle") == "") miss.push(MA_TIPO + ": indique cuál es «Otros»");
   if (!maAny(["tarifa_basica", "tarifa_premium"])) miss.push("Selección de tarifa");
   if (MA_DUR && maDur() < 0) miss.push("Duración (1, 2 o 5 años)");
   if (maTooMany()) miss.push(maTooMany());
@@ -256,11 +282,12 @@ function maEnviar() {
   if (app.alert(msg, 2, 2) == 4) {
     maDoc.mailDoc({ bUI: true, cTo: "info@medassure.es",
       cSubject: "Solicitud medassure %(product)s - " + maVal("apellidos_nombre"),
-      cMsg: "Adjunto la solicitud del seguro de complicaciones medassure %(product)s.\n\nFecha de la intervención: " + maVal("fecha_intervencion") });
+      cMsg: "Adjunto la solicitud del seguro de complicaciones medassure %(product)s.\n\n%(fecha_tip)s: " + maVal("%(fecha)s") });
   }
 }
-''' % {'prices': json.dumps(PRICES), 'tipos': json.dumps(['intervencion_' + k for k, _ in TIPOS]),
-       'medico': MEDICO[0], 'medico_tip': MEDICO[1], 'dur': 'true' if product == 'ophtal' else 'false',
+''' % {'prices': json.dumps(PRICES), 'tipos': json.dumps([PREFIX + k for k, _ in TIPOS]),
+       'medico': MEDICO[0], 'medico_tip': MEDICO[1], 'dur': 'true' if MULTI else 'false',
+       'tipo': TIPO, 'tipo_pl': TIPO_PL, 'prefix': PREFIX, 'fecha': FECHA[0], 'fecha_tip': FECHA[1],
        'sur': json.dumps(SURCHARGE), 'max': json.dumps(MAX_N),
        'product': product}
 w.add_js(JS)
@@ -315,8 +342,7 @@ for page in w.pages:
     page[NameObject('/Annots')] = ArrayObject(sorted(annots, key=key))
     page[NameObject('/Tabs')] = NameObject('/R')
 
-title = {'ophtal': 'medassure ophtal – Información económica y solicitud',
-         'ortho': 'medassure ortho – Información económica y solicitud'}[product]
+title = f'medassure {product} – Información económica y solicitud'
 w.add_metadata({'/Title': title, '/Author': 'IberAssekuranz Brokers'})
 with open(out, 'wb') as f:
     w.write(f)
