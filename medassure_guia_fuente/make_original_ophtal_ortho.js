@@ -4,11 +4,14 @@
 //
 // Uso: node make_original_ophtal_ortho.js ophtal originales/Formulario_-_Medassure_Ophtal.pdf originales/layout_ophtal.json
 //      node make_original_ophtal_ortho.js ortho  originales/Formulario_-_Medassure_Ortho.pdf  originales/layout_ortho.json
+// Versión para imprimir y rellenar a mano (sin layout): añada --imprimir, p. ej.
+//      node make_original_ophtal_ortho.js ophtal ../medassure_ophtal_Formulario_imprimir.pdf --imprimir
 // Precios y coberturas: folletos «Flyer - Medassure Ophtal» y «Flyer - Medassure Ortho» (originales/).
 const fs = require('fs');
 const { chromium } = require('playwright');
 
-const [product, pdfOut, layoutOut] = process.argv.slice(2);
+const IMPRESO = process.argv.includes('--imprimir');  // paper version: blank premium box, instructions for paper
+const [product, pdfOut, layoutOut] = process.argv.slice(2).filter(a => a !== '--imprimir');
 
 const P = {
   ophtal: {
@@ -149,11 +152,14 @@ table.pt { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 
 .band { display: flex; align-items: center; margin: 10px 0 0 auto; width: 49.4%; height: 29px; background: ${P.dark}; border-radius: 5px;
         color: #fff; font-weight: bold; font-size: 12.5px; padding-left: 13px; }
 .band span { flex: 1; height: 100%; margin-left: 12px; }
+.impreso .band { background: #fff; border: 1.5px solid ${P.dark}; color: ${P.dark}; }
+.impreso .band span { flex: none; width: 46%; margin-left: auto; border-left: 1px solid ${P.tintBorder}; }
+.impreso .band span::after { content: '€'; float: right; line-height: 26px; margin-right: 10px; color: #1c2430; }
 .decl { background: #f6f7f8; border: 1px solid #dde1e5; border-radius: 7px; padding: 8px 13px; margin-top: 14px; font-size: 7.6px; line-height: 10.6px; }
 .decl b { font-size: 9.5px; display: block; margin-bottom: 2px; }
 </style></head><body>
 
-<div class="page p1">
+<div class="page p1${IMPRESO ? ' impreso' : ''}">
   <div class="head">${logo}<div class="addr">${contacto}</div></div>
   <h1>Información económica complementaria</h1>
   <div class="kicker">${P.aviso}</div>
@@ -178,10 +184,13 @@ table.pt { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 
   ${footer(1)}
 </div>
 
-<div class="page p2">
+<div class="page p2${IMPRESO ? ' impreso' : ''}">
   <div class="head">${logo}<div class="addr">${contacto.replace('<br>', ' · ').replace('<br><span', ' · <span')}</div></div>
-  <div class="info"><span class="i">i</span><div><b>Cómo funciona:</b> rellene todos los campos y envíe la solicitud a
-    <b>info@medassure.es como máximo 1 día antes de la intervención</b>. Consultas: <b>+34 672 69 68 21</b>
+  <div class="info"><span class="i">i</span><div><b>Cómo funciona:</b> ${IMPRESO
+    ? `rellene todos los campos con letra clara, firme y envíe la solicitud (escaneada o en foto) a
+    <b>info@medassure.es como máximo 1 día antes de la intervención</b>, o entréguela en la clínica.`
+    : `rellene todos los campos y envíe la solicitud a
+    <b>info@medassure.es como máximo 1 día antes de la intervención</b>.`} Consultas: <b>+34 672 69 68 21</b>
     (9–18 h; viernes, julio y agosto, 9–15 h).</div></div>
   ${sec(1, 'Datos personales del tomador del seguro')}
   <div class="row">${field('apellidos_nombre', 'APELLIDOS, NOMBRE')}${field('fecha_nacimiento', 'FECHA DE NACIMIENTO (DD/MM/AAAA)')}</div>
@@ -236,7 +245,7 @@ table.pt { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 
     return out;
   });
   await p.pdf({ path: pdfOut, preferCSSPageSize: true, printBackground: true });
-  fs.writeFileSync(layoutOut, JSON.stringify(layout, null, 1));
+  if (layoutOut) fs.writeFileSync(layoutOut, JSON.stringify(layout, null, 1));
   await b.close();
   console.log(pdfOut, Object.keys(layout).length - 1, 'posiciones; desborda:', layout._overflow);
 })();
